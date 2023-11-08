@@ -1,7 +1,11 @@
 // import dependencies
-const express = require('express')
-const app = express()
-const pgp = require('pg-promise')()
+const express = require('express'); // To build an application server or API
+const app = express();
+const pgp = require('pg-promise')() // To connect to the Postgres DB from the node server
+const bodyParser = require('body-parser')
+const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
+const bcrypt = require('bcrypt') //  To hash passwords
+const axios = require('axios') // To make HTTP requests from our server. We'll learn more about it in Part B.
 
 
 // start the server
@@ -17,3 +21,22 @@ const dbConfig = {
     password: process.env.POSTGRES_PASSWORD
 }
 const db = pgp(dbConfig)
+
+// App settings
+app.set('view engine', 'ejs'); // set the view engine to EJS
+app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+
+// initialize session variables
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        saveUninitialized: false,
+        resave: false,
+    })
+);
+
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
