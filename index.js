@@ -73,8 +73,9 @@ app.get('/home', (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-
-})
+    req.session.destroy();
+    res.render("pages/logout");
+  });
 
 // start the server
 app.listen(3000)
