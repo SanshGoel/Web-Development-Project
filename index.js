@@ -111,6 +111,10 @@ app.get('/home', (req, res) => {
 
 })
 
+app.get('/friends', (req, res) => {
+    // res.render('pages/friends')
+})
+
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.render("pages/logout");
