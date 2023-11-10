@@ -44,6 +44,10 @@ app.use(
 //                  Without Auth
 // *****************************************************
 
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'})
+})
+
 app.get('/', (req, res) => {
     res.redirect('/login')
 })
@@ -121,5 +125,5 @@ app.get("/logout", (req, res) => {
   });
 
 // start the server
-app.listen(3000)
+module.exports = app.listen(3000)
 console.log('Server is listening on port 3000')
