@@ -1,0 +1,22 @@
+<%- include ('../partials/head') %>
+
+        <main>
+            <div class="container" style="margin: auto;">
+                <h1>ContactMi Login</h1>
+                <form action="/register" method="POST" style="margin-bottom: 2em;">
+                    <div style="margin-bottom: 1em;">
+                        <label for="username" style="display: block; margin-bottom: .5em;">Username:</label>
+                        <input type="text" id="username" name="username" style="width: 100%;" />
+                    </div>
+                    <div style="margin-bottom: 1em;">
+                        <label for="password" style="display: block; margin-bottom: .5em;">Password:</label>
+                        <input type="password" id="password" name="password" style="width: 100%;" />
+                    </div>
+
+                    <div style="text-align: right;">
+                        <input type="submit" value="Submit" style="width: 30%;" />
+                    </div>
+            </div>
+        </main>
+
+<%- include ('../partials/footer') %>
