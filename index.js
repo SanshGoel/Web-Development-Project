@@ -52,6 +52,45 @@ app.get('/login', (req, res) => {
     res.render('pages/login',{})
 })
 
+app.post('/login', async (req, res) => {
+
+    const loginQuery = `SELECT * FROM users WHERE username = $1;`
+    const usernameQueryParam = req.body.username
+
+    db.query(loginQuery, [usernameQueryParam])
+        .then(async (data) => {
+
+            if (!data) {
+                res.redirect('/register')
+                return
+            }
+            if (typeof data !== "object" || !data.length || data.length !== 1) {
+                res.redirect('/login', {
+                    error: true,
+                    message: "could not resolve password in database. If this error persists, please reach out to customer service"
+                })
+            }
+
+            // check if password from request matches with password in DB
+            const match = await bcrypt.compare(req.body.password, data[0].password)
+
+            if (match) {
+                //save user details in session like in lab 8
+                req.session.user = data[0]
+                req.session.save()
+
+                res.redirect('/discover')
+                return
+            }
+            res.redirect('/register')
+        })
+        .catch(() => res.redirect('/login', {
+            error: true,
+            message: "could not resolve password in database. If this error persists, please reach out to customer service"
+        }))
+})
+
+
 // *****************************************************
 //                 With Auth
 // *****************************************************
