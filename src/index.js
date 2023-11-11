@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-    res.status(200).render('pages/login',{omitNavbar: true})
+    res.status(200).render('pages/login',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
 
 app.post('/login', async (req, res) => {
@@ -96,7 +96,11 @@ app.post('/login', async (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-    res.status(200).render('pages/register',{omitNavbar: true})
+    res.status(200).render('pages/register',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
+})
+
+app.get('/debug', (req, res) => {
+
 })
 
 // *****************************************************
