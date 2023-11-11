@@ -5,7 +5,7 @@ const pgp = require('pg-promise')() // To connect to the Postgres DB from the no
 const bodyParser = require('body-parser')
 const session = require('express-session') // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt') //  To hash passwords
-const axios = require('axios') // To make HTTP requests from our server. We'll learn more about it in Part B.
+const axios = require('axios')
 
 // database configuration
 const dbConfig = {
@@ -18,6 +18,7 @@ const dbConfig = {
 const db = pgp(dbConfig)
 
 // App settings
+app.set('views', './src/views')
 app.set('view engine', 'ejs') // set the view engine to EJS
 app.use(bodyParser.json()) // specify the usage of JSON for parsing request body.
 
@@ -49,11 +50,11 @@ app.get('/welcome', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    res.redirect('/login')
+    res.status(200).redirect('/login')
 })
 
 app.get('/login', (req, res) => {
-    res.render('pages/login',{})
+    res.status(200).render('pages/login',{})
 })
 
 app.post('/login', async (req, res) => {
@@ -69,7 +70,7 @@ app.post('/login', async (req, res) => {
                 return
             }
             if (typeof data !== "object" || !data.length || data.length !== 1) {
-                res.redirect('/login', {
+                res.status(500).redirect('/login', {
                     error: true,
                     message: "could not resolve password in database. If this error persists, please reach out to customer service"
                 })
@@ -83,17 +84,20 @@ app.post('/login', async (req, res) => {
                 req.session.user = data[0]
                 req.session.save()
 
-                res.redirect('/discover')
+                res.status(200).redirect('pages/home')
                 return
             }
-            res.redirect('/register')
+            res.status(400).redirect('pages/register')
         })
-        .catch(() => res.redirect('/login', {
+        .catch(() => res.status(500).redirect('pages/login', {
             error: true,
             message: "could not resolve password in database. If this error persists, please reach out to customer service"
         }))
 })
 
+app.get('/register', (req, res) => {
+    res.status(200).render('pages/register',{})
+})
 
 // *****************************************************
 //                 With Auth
