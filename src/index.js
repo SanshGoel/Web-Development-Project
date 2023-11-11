@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-    res.status(200).render('pages/login',{})
+    res.status(200).render('pages/login',{omitNavbar: true})
 })
 
 app.post('/login', async (req, res) => {
@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-    res.status(200).render('pages/register',{})
+    res.status(200).render('pages/register',{omitNavbar: true})
 })
 
 // *****************************************************

@@ -11,5 +11,9 @@
 </head>
 <body>
 <%- include ('../../resources/img/backdrop') %>
-<%- include ('../partials/menu') %>
+<% if(!locals.omitNavbar) { %>
+    <%- include ('../partials/menu') %>
+<% }%>
 <main>
+    <div style="height: 3em;" ></div>
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="width: 60em; max-width: 95%; margin: auto; display: flex;">
