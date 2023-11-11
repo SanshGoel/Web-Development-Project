@@ -5,7 +5,7 @@ const pgp = require('pg-promise')() // To connect to the Postgres DB from the no
 const bodyParser = require('body-parser')
 const session = require('express-session') // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt') //  To hash passwords
-const axios = require('axios') // To make HTTP requests from our server. We'll learn more about it in Part B.
+const axios = require('axios')
 
 // database configuration
 const dbConfig = {
@@ -18,6 +18,7 @@ const dbConfig = {
 const db = pgp(dbConfig)
 
 // App settings
+app.set('views', './src/views')
 app.set('view engine', 'ejs') // set the view engine to EJS
 app.use(bodyParser.json()) // specify the usage of JSON for parsing request body.
 
