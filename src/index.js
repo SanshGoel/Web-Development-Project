@@ -100,7 +100,7 @@ app.get('/register', (req, res) => {
 })
 
 app.get('/debug', (req, res) => {
-
+    res.status(200).render('pages/friends',{})
 })
 
 // *****************************************************
