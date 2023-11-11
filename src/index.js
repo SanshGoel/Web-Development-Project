@@ -50,11 +50,11 @@ app.get('/welcome', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    res.redirect('/login')
+    res.status(200).redirect('/login')
 })
 
 app.get('/login', (req, res) => {
-    res.render('pages/login',{})
+    res.status(200).render('pages/login',{})
 })
 
 app.post('/login', async (req, res) => {
@@ -70,7 +70,7 @@ app.post('/login', async (req, res) => {
                 return
             }
             if (typeof data !== "object" || !data.length || data.length !== 1) {
-                res.redirect('/login', {
+                res.status(500).redirect('/login', {
                     error: true,
                     message: "could not resolve password in database. If this error persists, please reach out to customer service"
                 })
@@ -84,17 +84,20 @@ app.post('/login', async (req, res) => {
                 req.session.user = data[0]
                 req.session.save()
 
-                res.redirect('/discover')
+                res.status(200).redirect('pages/home')
                 return
             }
-            res.redirect('/register')
+            res.status(400).redirect('pages/register')
         })
-        .catch(() => res.redirect('/login', {
+        .catch(() => res.status(500).redirect('pages/login', {
             error: true,
             message: "could not resolve password in database. If this error persists, please reach out to customer service"
         }))
 })
 
+app.get('/register', (req, res) => {
+    res.status(200).render('pages/register',{})
+})
 
 // *****************************************************
 //                 With Auth
