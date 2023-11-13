@@ -103,8 +103,6 @@ app.get('/debug', (req, res) => {
     res.status(200).render('pages/friends',{})
 })
 
-const bcrypt = require('bcrypt');
-
 app.post('/register', async (req, res) => {
     try {
         const { username, password, display_name, phone, email } = req.body;
