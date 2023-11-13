@@ -1,0 +1,23 @@
+Meeting Logs: Nov 9 2023
+
+Create a folder named "MeetingLogs."
+Within this folder, we create files for each week or date to record weekly updates, decisions, alternative actions, follow-up items, and agreed-upon roles and responsibilities.
+Milestone Submissions:
+
+
+
+Tasks/Meeting Notes - Nov 9 2023
+Document Organization: Maintain a well-organized structured folder for all course-related documents. Keep this folder up-to-date with the latest versions of documents, including the current one. This ensures easy access to essential course-related materials.
+Regularly commit all progress to a dedicated GitHub repository for version control.
+Ensure regular updates in "Meeting logs" following each weekly meeting.
+Work on developing a user case diagram for the project.
+Implement additional functions for each page, focusing on enhancing user interactions. Functions could include "Update Profile" or "User Information."
+
+
+Individual Tasks->
+Sansh Goel - Work on test cases and modify use case diagram as discussed in the meeting.
+Nikhil Bailey - Build friends page and design UAT tests. Build /login api route.
+Samuel Beste - Add button for editing profile, create page for viewing "my profile"
+Adan Esparza - Finished working on Login.ejs file and need to begin updtating Register.ejs file.
+Vidhaan Singhvi - Work on test cases and build API's for post and update login.
+
