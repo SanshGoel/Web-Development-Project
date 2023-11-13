@@ -20,4 +20,4 @@ Nikhil Bailey - Build friends page and design UAT tests. Build /login api route.
 Samuel Beste - Add button for editing profile, create page for viewing "my profile"
 Adan Esparza - Finished working on Login.ejs file and need to begin updtating Register.ejs file.
 Vidhaan Singhvi - Work on test cases and build API's for post and update login.
-
+Tanmay Meti - added logout page and logout API. Also added UAT plans for the project.
