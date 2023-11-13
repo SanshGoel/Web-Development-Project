@@ -103,6 +103,34 @@ app.get('/debug', (req, res) => {
     res.status(200).render('pages/friends',{})
 })
 
+const bcrypt = require('bcrypt');
+
+app.post('/register', async (req, res) => {
+    try {
+        const { username, password, display_name, phone, email } = req.body;
+
+        // Hash the password using bcrypt library
+        const hash = await bcrypt.hash(password, 10);
+
+        // To-DO: Insert user details into 'users' table with auto-incrementing user_id
+        const userQuery = `
+            INSERT INTO users (username, password, display_name, phone, email, bio)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING user_id
+        `;
+
+        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio]);
+
+        const userId = result.rows[0].user_id;
+
+        console.log("Registered: " + username + " with user_id: " + userId);
+        res.status(200).redirect('/login');
+    } catch (error) {
+        console.error(error);
+        res.status(400).redirect('/register');
+    }
+});
+
 // *****************************************************
 //                 With Auth
 // *****************************************************
