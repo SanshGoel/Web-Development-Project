@@ -4,7 +4,7 @@ CREATE TABLE users (
     password VARCHAR(60) NOT NULL,
     display_name VARCHAR(100),
     phone VARCHAR(20),
-    email VARCHAR(100)
+    email VARCHAR(100),
     bio VARCHAR(100)
 );
 
@@ -21,13 +21,13 @@ CREATE TABLE pending_friends(
     requestee_id INT,
     FOREIGN KEY (requester_id) REFERENCES users(user_id),
     FOREIGN KEY (requestee_id) REFERENCES users(user_id),
-    PRIMARY KEY (requester_id, requestee_id)
+    PRIMARY KEY (requester_id, requestee_id),
     CHECK (requester_id != requestee_id)
 );
 
 CREATE TABLE headshot(
     user_id INT,
-    img varbinary(max)
+    img BYTEA
 );
 
 

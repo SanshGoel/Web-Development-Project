@@ -105,7 +105,7 @@ app.get('/debug', (req, res) => {
 
 app.post('/register', async (req, res) => {
     try {
-        const { username, password, display_name, phone, email } = req.body;
+        const { username, password, display_name, phone, email, bio } = req.body;
 
         // Hash the password using bcrypt library
         const hash = await bcrypt.hash(password, 10);
@@ -119,7 +119,10 @@ app.post('/register', async (req, res) => {
 
         const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio]);
 
-        const userId = result.rows[0].user_id;
+        // console.log(req.body); 
+        // console.log("Result of the INSERT query:", result);
+
+        const userId = result[0].user_id;
 
         console.log("Registered: " + username + " with user_id: " + userId);
         res.status(200).redirect('/login');
