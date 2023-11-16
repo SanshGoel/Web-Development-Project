@@ -99,7 +99,7 @@ app.get('/register', (req, res) => {
     res.status(200).render('pages/register',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
 
-app.get('/debug', (req, res) => {
+app.get('/friends', (req, res) => {
     res.status(200).render('pages/friends',{})
 })
 
