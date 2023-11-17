@@ -205,7 +205,7 @@ app.get('/friends', (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session.destroy();
-    res.render("pages/logout");
+    res.status(200).render('pages/logout',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true});
   });
 
 // start the server
