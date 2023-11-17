@@ -54,26 +54,23 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-    res.status(200).render('pages/login',{omitNavbar: true})
+    res.status(200).render('pages/login',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
 
 app.post('/login', async (req, res) => {
 
-    const loginQuery = `SELECT * FROM users WHERE username = $1;`
+    const loginQuery = `SELECT * FROM users WHERE username=$1;`
     const usernameQueryParam = req.body.username
 
     db.query(loginQuery, [usernameQueryParam])
         .then(async (data) => {
 
-            if (!data) {
-                res.redirect('/register')
-                return
-            }
-            if (typeof data !== "object" || !data.length || data.length !== 1) {
-                res.status(500).redirect('/login', {
+            if (!data || !Array.isArray(data) || !data.length || data.length !== 1) {
+                res.redirect( '/register', {
                     error: true,
                     message: "could not resolve password in database. If this error persists, please reach out to customer service"
                 })
+                return
             }
 
             // check if password from request matches with password in DB
@@ -84,20 +81,56 @@ app.post('/login', async (req, res) => {
                 req.session.user = data[0]
                 req.session.save()
 
-                res.status(200).redirect('pages/home')
+                res.redirect('pages/home')
                 return
             }
-            res.status(400).redirect('pages/register')
+            res.redirect('pages/register', {
+                error: false,
+                message: "username or password may be incorrect"
+            })
         })
-        .catch(() => res.status(500).redirect('pages/login', {
+        .catch(() => res.redirect( 'pages/register', {
             error: true,
             message: "could not resolve password in database. If this error persists, please reach out to customer service"
         }))
 })
 
 app.get('/register', (req, res) => {
-    res.status(200).render('pages/register',{omitNavbar: true})
+    res.status(200).render('pages/register',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
+
+app.get('/friends', (req, res) => {
+    res.status(200).render('pages/friends',{})
+})
+
+app.post('/register', async (req, res) => {
+    try {
+        const { username, password, display_name, phone, email, bio } = req.body;
+
+        // Hash the password using bcrypt library
+        const hash = await bcrypt.hash(password, 10);
+
+        // To-DO: Insert user details into 'users' table with auto-incrementing user_id
+        const userQuery = `
+            INSERT INTO users (username, password, display_name, phone, email, bio)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING user_id
+        `;
+
+        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio]);
+
+        // console.log(req.body); 
+        // console.log("Result of the INSERT query:", result);
+
+        const userId = result[0].user_id;
+
+        console.log("Registered: " + username + " with user_id: " + userId);
+        res.redirect('/login');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/register');
+    }
+});
 
 // *****************************************************
 //                 With Auth

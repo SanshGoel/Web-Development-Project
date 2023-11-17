@@ -1,0 +1,121 @@
+﻿User Acceptance Testing Plans
+Specific test cases
+Register/login Features
+As a user I would like to be able to login with a username bounded by my phone number and my passwords bounded by including at least one of upper and lower case letters. 
+ A user cannot register without filling out all of the required fields: Phone, User ID, Display name, Email, Password
+Add Friend Feature
+As a user I would like to be able to add a friend using their username, they should now show up in my friends list and I should be able to view their contact details.
+
+
+A user cannot add a friend who’s username is not attached to a registered user in the system.
+Search Friend Feature
+A user who is already registered and logged in clicks on the search bar. Then, they type into the search bar the contact information of another user who has registered for the app. This user credentials will be provided to them to simulate their friend whom they are trying to contact.
+
+
+The user will then press the button to initiate the search, navigate to the card of the profile they were told to search for, click that profile, and read specified fields off of the card.
+Description of test data
+Register/login Features
+* Test: Successful Registration and Login
+   * Data: Complete user information for registration
+* Test: Incomplete registration
+   * Data: Incomplete user information
+* Test: Registration with existing user ID
+   * Data: Complete user information for registration
+* Test: Login with unregistered user ID
+   * Data: Unregistered user information
+
+
+Add Friend Feature
+The data we plan to use to test the Add Friend feature is a list of user ID’s, in this list some users are unregistered. One registered user will attempt to add the others.
+Search Friend Feature
+The data we plan to use to test the Search Friend feature is a list of registered users that are friends on the site
+Description of test environment
+Inside the database, there will be
+Register/login Features
+Registration process:
+Test for successful registration with valid details.
+Test for handling of duplicate usernames or emails.
+Test for validation of email formats and password strength.
+Test for error messages when mandatory fields are left blank.
+
+
+Login process:
+Test for successful login with correct credentials.
+Test for handling of incorrect usernames or passwords.
+Test for account lockout after multiple failed attempts, if applicable.
+Test for password reset functionality.
+Add Friend Feature
+
+
+Sending and Receiving Friend Requests:
+Test for the ability to send a friend request to another user.
+Test for the notification or alert to the receiving user.
+Test for the ability to accept or decline friend requests.
+
+
+Friend List Updates:
+Test for correct updates to friend lists upon accepting requests.
+Test for handling cases where a request is declined.
+
+
+User Interface and Error Handling:
+Test for UI in sending and managing friend requests.
+Test for error messages for situations like sending a request to a non-existent user.
+
+
+Search Friend Feature
+Functionality:
+Test for accurate search results based on different criteria.
+Test for the handling of no results found scenarios.
+User Interface:
+Test for the clarity and responsiveness of the search interface.
+Description of test results
+From actually doing the tests we gathered
+Register/login Features
+* Test: Successful Registration and Login
+   * Data: Whether or not registration or login was successful
+* Test: Incomplete registration
+   * Data: Whether registration was unsuccessful
+* Test: Registration with existing user ID
+   * Data: Whether error was returned and registration terminated
+* Test: Login with unregistered user ID
+   * Data: If login fails
+Add Friend Feature
+
+
+Sending and Receiving Friend Requests:
+* Test for the ability to send a friend request to another user.
+   * Data: Did the other user show up?
+* Test for the notification or alert to the receiving user.
+   * Data: Did the other user receive the invite?
+* Test for the ability to accept or decline friend requests.
+   * Data: When person 2 accepts person 1’s invite, p2 should show up on p1’s friends list
+
+
+Friend List Updates:
+* Test for correct updates to friend lists upon accepting requests.
+   * Data: When person 2 accepts person 1’s invite, p2 should show up on p1’s friends list
+* Test for handling cases where a request is declined.
+   * Data: When person 2 declines person 1’s friend request, p2 should not show up on p1’s friends list
+
+
+User Interface and Error Handling:
+* Test for error messages for situations like sending a request to a non-existent user.
+   * Data: Error message displayed or not
+Search Friend Feature
+Functionality:
+* Test for accurate search results based on different criteria.
+   * Test: Whether the correct results are displayed
+* Test for the handling of no results found scenarios.
+   * Test: Whether a message displays for “No results found”
+User Interface:
+* Test for the clarity and responsiveness of the search interface.
+   * Test: Search should be intuitive and relatively quick
+User acceptance testers info
+Notable information about each of are testers includes
+Register/login Features
+One tester will be needed. They will attempt to register users from the test data list, another tester will then try to login to each.
+Add Friend Feature
+One tester will send friend requests while the other will accept/decline requests
+Search Friend Feature
+One tester will be needed. They will try to look up a person that has already registered and is part of the database.

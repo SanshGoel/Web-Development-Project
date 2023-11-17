@@ -1,0 +1,41 @@
+<%- include ('../partials/head') %>
+
+<% locals.friends = [{friendId: 1, displayName: "Thing 1", status: "high on coffee"}, {friendId: 2, displayName: "Thing 2", status: "took 1 too many naps this week"}] %>
+<% locals.currentFriend = {friendId: 1, displayName: "Thing 1", status: "high on coffee"} %>
+
+<script src="../../resources/js/friends.js"></script>
+
+<div class="container" style="width: 100%; margin: auto; display: flex;">
+    <div id="friendsList-panel" style="width: 40%; min-width: 25em; display: flex; flex-direction: column; overflow: scroll; gap: .5em">
+        <% if (locals.friends && Array.isArray(locals.friends)) locals.friends.forEach((friend) => { %>
+            <div id="friends-list-item-<%- friend.friendId%>" class="friends-list-item stretched-link text-decoration-none card"
+                 style="display: flex; flex-direction: row; padding: .5em;"
+                 onclick="
+                        fetch(`/friends?friendId=${this.friendId}`, {
+                            method: 'GET'
+                        })
+                        .then()
+                ">
+                <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;">
+                <div class="friends-list-body" style="padding-left: .7em;">
+                    <div class="friends-list-name" style="font-weight: bold;"><%- friend.displayName %></div>
+                    <div class="friends-list-status" style="font-size: .8em;"><%- friend.status %></div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    <div>
+        <div id="current-friend-display" class="card" style="margin-left: 2em;">
+            <img class="rounded-circle shadow-4-strong" style="height: 9em; width: 9em; margin: 1em auto;">
+            <div><%- locals.currentFriend && locals.currentFriend.displayName ? locals.currentFriend.displayName : " " %></div>
+            <label>Email</label>
+            <div><%- locals.currentFriend && locals.currentFriend.email ? locals.currentFriend.email : " " %></div>
+            <label>Phone</label>
+            <div><%- locals.currentFriend && locals.currentFriend.phone ? locals.currentFriend.phone : " " %></div>
+            <label>Bio</label>
+            <div><%- locals.currentFriend && locals.currentFriend.bio ? locals.currentFriend.bio : " " %></div>
+        </div>
+    </div>
+</div>
+
+<%- include ('../partials/footer') %>

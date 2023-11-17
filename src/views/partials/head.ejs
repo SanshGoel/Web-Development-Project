@@ -11,9 +11,10 @@
 </head>
 <body>
 <%- include ('../../resources/img/backdrop') %>
-<% if(!locals.omitNavbar) { %>
-    <%- include ('../partials/menu') %>
-<% }%>
 <main>
-    <div style="height: 3em;" ></div>
-    <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="width: 60em; max-width: 95%; margin: auto; display: flex;">
+    <div style="height: <%- locals.fartherFromTop ? "10vh" : "2em"%>;"></div>
+    <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="width: <%- locals.customBodyWidthEM ? locals.customBodyWidthEM : 80 %>em; max-width: 95%; margin: auto; display: flex;">
+        <% if(!locals.omitNavbar) { %>
+            <%- include ('../partials/menu') %>
+        <% }%>
+            <div style="height: .5em;"></div>
