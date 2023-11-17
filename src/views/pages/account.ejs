@@ -1,20 +1,19 @@
 <%- include ('../partials/head') %>
-<%- include ('../partials/menu') %>
 
 <div class="container" style="width: 80%; margin: auto;">
     <h1 style="position: relative; left: 150px;">ContactMi Account</h1>
-    <form action="/register" method="POST">
+    <form action="/edit-account" method="POST">
     
             <h2>Edit Details About Your Account</h2>
 
             <div style="margin-bottom: 1em;">
                 <label for="username" style="margin-bottom: .5em;">Username *</label>
-                <input type="text" value="<%= req.session.user.username %>" id="username" name="username"  style="width: 100%;border: 1px solid #964A99;" placeholder="Input Your Username" />
+                <input type="text" value="<%= user.username %>" id="username" name="username"  style="width: 100%;border: 1px solid #964A99;" placeholder="Input Your Username" />
             </div>
 
             <div style="margin-bottom: 1em;">
                 <label for="display_name" style=" margin-bottom: .5em;">Display Name *</label>
-                <input type="text" value="<%= req.session.user.display_name %>" id="display_name" name="display_name"  style="width: 100%; border: 1px solid #964A99;" placeholder="Input Your Display Name"  />
+                <input type="text" value="<%= user.display_name %>" id="display_name" name="display_name"  style="width: 100%; border: 1px solid #964A99;" placeholder="Input Your Display Name"  />
             </div>
 
         
@@ -23,25 +22,25 @@
             <h2>Contact Information</h2>
             <div style="margin-bottom: 1em;">
                 <label for="email" style=" margin-bottom: .5em;">Email *</label>
-                <input type="email" id="email" name="email" value="<%= req.session.user.email %>" style="width: 100%;border: 1px solid #964A99;" placeholder="Input Your Email" />
+                <input type="email" id="email" name="email" value="<%= user.email %>" style="width: 100%;border: 1px solid #964A99;" placeholder="Input Your Email" />
             </div>
 
             <div style="margin-bottom: 1em;">
                 <label for="phone" style=" margin-bottom: .5em;">Phone Number *</label>
-                <input type="tel" id="phone" value="<%= req.session.user.phone %>" name="phone" style="width: 100%;border: 1px solid #964A99;"  placeholder="Input Your Phone Number"  />
+                <input type="tel" id="phone" value="<%= user.phone %>" name="phone" style="width: 100%;border: 1px solid #964A99;"  placeholder="Input Your Phone Number"  />
             </div>
 
 
             <h2>Personal Information</h2> 
             <div style="margin-bottom: 1em;">
-                <label for="bio" style="margin-bottom: .5em;">Bio <i>(opt.)</i></label>
-                <textarea type="text" id="bio" name="bio" value="<%= req.session.user.bio %>" style="width: 100%;border: 1px solid #964A99;" placeholder="Describe yourself here..."></textarea>
+                <label for="bio" style="margin-bottom: .5em;">Bio </label>
+                <input type="text" id="bio" name="bio" value="<%= user.bio %>" style="width: 100%;border: 1px solid #964A99;" placeholder="Describe yourself here..."></textarea>
             </div>
 
 
 
-        <div style="text-align: right;">
-            <button class="btn styled-button" type="submit" style="width: 30%; position: relative; bottom: 2em; background-color: #34AAEB;">Register</button>
+        <div style="text-align: right; margin-top: 1em;">
+            <button class="btn styled-button" type="submit" style="width: 30%; position: relative; bottom: 1em; background-color: #34AAEB;">Submit Changes</button>
         </div>
     </form>
 </div>

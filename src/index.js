@@ -103,6 +103,23 @@ app.get('/friends', (req, res) => {
     res.status(200).render('pages/friends',{})
 })
 
+
+app.get('/edit-account', (req, res) => {
+    // Check if user is logged in
+    if (req.session.user) {
+        // Render the registration page and pass user details to the template
+        res.status(200).render('pages/account', {
+            omitNavbar: false,
+            customBodyWidthEM: 60,
+            fartherFromTop: true,
+            user: req.session.user 
+        });
+    } else {
+        res.redirect('pages/login');
+    }
+});
+
+
 app.post('/register', async (req, res) => {
     try {
         const { username, password, display_name, phone, email, bio } = req.body;
@@ -131,6 +148,36 @@ app.post('/register', async (req, res) => {
         res.redirect('/register');
     }
 });
+
+app.post('/edit-account', async (req, res) => {
+    try {
+        const { username, display_name, phone, email, bio } = req.body;
+
+        const userUpdateQuery = `
+            UPDATE users
+            SET display_name = $2, phone = $3, email = $4, bio = $5
+            WHERE username = $1
+            RETURNING user_id
+        `;
+
+        const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio]);
+
+        // Check if the update was successful
+        if (result && Array.isArray(result) && result.length === 1) {
+            const userId = result[0].user_id;
+            console.log("Updated user details for user_id: " + userId);
+            res.redirect('/edit-account');
+        } else {
+            console.log("Failed to update user details");
+            res.redirect('/edit-account');
+        }
+    } catch (error) {
+        console.error(error);
+        res.redirect('/edit-account');
+    }
+});
+
+
 
 // *****************************************************
 //                 With Auth
