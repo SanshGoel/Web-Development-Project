@@ -1,0 +1,14 @@
+Tasks/Meeting Notes - Nov 16 2023
+
+Update the directory structure
+Make sure all commits are displayed to prevent merge errors/miswork
+
+
+Individual Tasks:
+
+Vidhaan Singhvi- Make a GETsearch for users and friends, create sql queries for search function. update meeting notes.
+Tanmay meti - Making the home page, then looking at the icebox to find new tasks
+Sansh Goel - Testing the api routes, work on insert.sql, working on leftover tasks
+Nikhil Bailey - Finishing friends current friends page, friends api route
+Sam Beste - Finishing edit account feature, finding another task or feature
+Adan Esparza - testing and finishing up all the api routes needed
