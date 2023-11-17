@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(60) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE users (
     bio VARCHAR(100)
 );
 
-CREATE TABLE friends (
+CREATE TABLE IF NOT EXISTS friends (
     user_id_1 INT,
     user_id_2 INT,
     FOREIGN KEY (user_id_1) REFERENCES users(user_id),
@@ -16,7 +16,7 @@ CREATE TABLE friends (
     PRIMARY KEY (user_id_1, user_id_2)
 );
 
-CREATE TABLE pending_friends(
+CREATE TABLE IF NOT EXISTS pending_friends(
     requester_id INT,
     requestee_id INT,
     FOREIGN KEY (requester_id) REFERENCES users(user_id),
@@ -25,7 +25,7 @@ CREATE TABLE pending_friends(
     CHECK (requester_id != requestee_id)
 );
 
-CREATE TABLE headshot(
+CREATE TABLE IF NOT EXISTS headshot(
     user_id INT,
     img BYTEA
 );
