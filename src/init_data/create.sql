@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS users (
     bio VARCHAR(100)
 );
 
+
 CREATE TABLE IF NOT EXISTS friends (
+
     user_id_1 INT,
     user_id_2 INT,
     FOREIGN KEY (user_id_1) REFERENCES users(user_id),
@@ -25,10 +27,9 @@ CREATE TABLE IF NOT EXISTS pending_friends(
     CHECK (requester_id != requestee_id)
 );
 
+
 CREATE TABLE IF NOT EXISTS headshot(
     user_id INT,
     img BYTEA
 );
-
-
 
