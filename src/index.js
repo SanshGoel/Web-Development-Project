@@ -57,7 +57,7 @@ app.get('/login', (req, res) => {
     res.status(200).render('pages/login',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
 
-app.post('/login', async (req, res) => {
+app.post('/login',(req, res) => {
 
     const loginQuery = `SELECT * FROM users WHERE username=$1;`
     const usernameQueryParam = req.body.username
@@ -66,10 +66,7 @@ app.post('/login', async (req, res) => {
         .then(async (data) => {
 
             if (!data || !Array.isArray(data) || !data.length || data.length !== 1) {
-                res.redirect( '/register', {
-                    error: true,
-                    message: "could not resolve password in database. If this error persists, please reach out to customer service"
-                })
+                res.redirect( '/register')
                 return
             }
 
@@ -84,25 +81,21 @@ app.post('/login', async (req, res) => {
                 res.redirect('pages/home')
                 return
             }
-            res.redirect('pages/register', {
-                error: false,
-                message: "username or password may be incorrect"
+
+            res.status(200).render('pages/login',{
+                error: true,
+                message: "username or password may be incorrect",
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true
             })
         })
-        .catch(() => res.redirect( 'pages/register', {
-            error: true,
-            message: "could not resolve password in database. If this error persists, please reach out to customer service"
-        }))
+        .catch(() => res.redirect( 'pages/register'))
 })
 
 app.get('/register', (req, res) => {
     res.status(200).render('pages/register',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
-
-app.get('/friends', (req, res) => {
-    res.status(200).render('pages/friends',{})
-})
-
 
 app.get('/edit-account', (req, res) => {
     // Check if user is logged in
@@ -200,7 +193,44 @@ app.get('/home', (req, res) => {
 })
 
 app.get('/friends', (req, res) => {
-    // res.render('pages/friends')
+
+    const currentFriendId = req.params.friendId
+    const hasCurrentFriend = !!currentFriendId
+
+    const user_id = req.session.user.user_id
+    const friendsQuery = `SELECT * FROM friends f INNER JOIN users u ON u.user_id = f.user_id_1 WHERE f.user_id_2 = $1`
+
+    db.query(friendsQuery, [user_id])
+        .then((data) => {
+
+            if (!data || !Array.isArray(data)) {
+                res.status(500).render('pages/friends', {
+                    friends: {},
+                    error: true,
+                    message: "could not resolve friends in database. If this error persists, please reach out to customer service"
+                })
+                return
+            }
+
+            let currentFriend = undefined
+            data.forEach((friend) => {
+                if (friend.user_id === currentFriendId) currentFriend = friend
+            })
+
+            res.status(200).render('pages/friends',{
+                currentFriend: currentFriend,
+                friends: data
+            })
+
+        })
+        .catch((error) => {
+            console.log(error)
+            res.status(500).send({
+                friends: {},
+                error: true,
+                message: "could not resolve friends in database. If this error persists, please reach out to customer service"
+            })
+        })
 })
 
 app.get("/logout", (req, res) => {

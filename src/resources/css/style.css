@@ -11,6 +11,7 @@
 #friendsList-panel {
     width: 40%;
     min-width: 25em;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     overflow: scroll;
@@ -20,6 +21,8 @@
 #current-friend-display {
     margin-left: 2em;
     padding: 1em;
+    min-height: 70vh;
+    min-width: 20em;
 }
 
 #current-friend-image {
