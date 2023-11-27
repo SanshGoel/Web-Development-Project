@@ -128,6 +128,25 @@ app.post('/register', async (req, res) => {
     try {
         const { username, password, display_name, phone, email, bio } = req.body;
 
+        //Check if a user already exists with that name
+        const preexistingCheck = `
+            SELECT * 
+            FROM users 
+            WHERE username = $1
+        `
+
+        const preexistingUsers = await db.query(preexistingCheck, [username])
+        if (!preexistingUsers || !Array.isArray(preexistingUsers) || preexistingUsers.length > 0) {
+            res.status(400).render('pages/register',{
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                error: true,
+                message: "username already exists"
+            })
+            return
+        }
+
         // Hash the password using bcrypt library
         const hash = await bcrypt.hash(password, 10);
 
@@ -136,22 +155,28 @@ app.post('/register', async (req, res) => {
             INSERT INTO users (username, password, display_name, phone, email, bio)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING user_id
-        `;
+        `
 
-        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio]);
-
-        // console.log(req.body); 
-        // console.log("Result of the INSERT query:", result);
-
+        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio])
+        if(!result || !Array.isArray(result) || result.length < 1) {
+            res.status(400).render('pages/register',{
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                error: true,
+                message: "could not resolve UserId in database. If this error persists, please reach out to our support team"
+            })
+            return
+        }
         const userId = result[0].user_id;
 
-        console.log("Registered: " + username + " with user_id: " + userId);
-        res.redirect('/login');
+        console.log("Registered: " + username + " with user_id: " + userId)
+        res.redirect('/login')
     } catch (error) {
-        console.error(error);
-        res.redirect('/register');
+        console.error(error)
+        res.redirect('/register')
     }
-});
+})
 
 app.post('/edit-account', async (req, res) => {
     try {
