@@ -81,7 +81,14 @@ app.post('/login',(req, res) => {
                 res.redirect('pages/home')
                 return
             }
-            res.redirect('pages/register')
+
+            res.status(200).render('pages/login',{
+                error: true,
+                message: "username or password may be incorrect",
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true
+            })
         })
         .catch(() => res.redirect( 'pages/register'))
 })
