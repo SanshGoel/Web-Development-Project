@@ -2,7 +2,7 @@
 
 
 <div class="container" style="width: 80%; margin: auto;">
-    <h1 style="position: relative; left: 150px;">ContactMi Register</h1>
+    <h1 style="position: relative; text-align: center;">ContactMi Register</h1>
     <form action="/register" method="POST">
     
             <h2>Account Information</h2>
@@ -42,12 +42,9 @@
                 <textarea type="text" id="bio" name="bio" style="width: 100%;border: 1px solid #964A99;" placeholder="Describe yourself here..."></textarea>
             </div>
 
-
-
-        <p>Already have an account? <a href="/login">Login</a></p>
-
-        <div style="text-align: right;">
-            <button class="btn styled-button" type="submit" style="width: 30%; position: relative; bottom: 2em; background-color: #34AAEB;">Register</button>
+        <div style="text-align: right; display: flex;">
+            <p>Already have an account? <a href="/login">Login</a></p>
+            <button class="btn styled-button" type="submit" style="width: 30%; bottom: 2em; background-color: #34AAEB; margin-left: auto;">Register</button>
         </div>
     </form>
 </div>
