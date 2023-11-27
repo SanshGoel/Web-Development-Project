@@ -188,9 +188,19 @@ const auth = (req, res, next) => {
 // Authentication Required
 app.use(auth)
 
-app.get('/home', (req, res) => {
-
-})
+app.get('/home', auth, (req, res) => {
+    const { user_id, display_name, phone, email, profile_image } = req.session.user;
+    
+    
+    res.render('pages/home', {
+    userID: user_id,
+    displayName: display_name,
+    phoneNumber: phone,
+    email: email,
+    profileImage: profile_image || '/images/default-profile.png'
+    });
+    });
+        
 
 app.get('/friends', (req, res) => {
 

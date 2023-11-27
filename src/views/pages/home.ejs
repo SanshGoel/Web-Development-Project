@@ -1,0 +1,53 @@
+<%- include ('../partials/head') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Page</title>
+<link rel="stylesheet" href="/src/resources/css/style.css">
+</head>
+<body>
+<div class="container">
+<header>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/src/views/pages/friends.ejs">Friends</a></li>
+<li><a href="/src/views/pages/login.ejs">Login/Logout</a></li>
+</ul>
+</nav>
+</header>
+
+
+<main>
+<div class="profile-card">
+<div class="profile-header">
+<h2>Display Name</h2>
+<a href="/edit-profile">Edit</a>
+</div>
+<div class="profile-info">
+<p><strong>User ID:</strong> <%= userID %></p>
+<p><strong>Phone Number:</strong> <%= phoneNumber %></p>
+<p><strong>Email:</strong> <%= email %></p>
+</div>
+<div class="profile-image">
+<img src="<%= profileImage %>" alt="Profile Image">
+</div>
+</div>
+<div class="search-bar">
+<form action="/search" method="GET">
+<input type="text" name="query" placeholder="Search...">
+<button type="submit">SEARCH</button>
+</form>
+</div>
+</main>
+
+
+<footer>
+<p>&copy; 2023 website</p>
+</footer>
+</div>
+</body>
+</html>
+<%- include ('../partials/footer') %>
