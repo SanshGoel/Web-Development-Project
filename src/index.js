@@ -65,8 +65,19 @@ app.post('/login',(req, res) => {
     db.query(loginQuery, [usernameQueryParam])
         .then(async (data) => {
 
-            if (!data || !Array.isArray(data) || !data.length || data.length !== 1) {
+            if (!data || !Array.isArray(data) || data.length > 1) {
                 res.redirect( '/register')
+                return
+            }
+
+            if (data.length == 0) {
+                res.status(400).render('pages/login',{
+                    error: true,
+                    message: "username or password may be incorrect",
+                    omitNavbar: true,
+                    customBodyWidthEM: 60,
+                    fartherFromTop: true
+                })
                 return
             }
 
@@ -82,7 +93,7 @@ app.post('/login',(req, res) => {
                 return
             }
 
-            res.status(200).render('pages/login',{
+            res.status(400).render('pages/login',{
                 error: true,
                 message: "username or password may be incorrect",
                 omitNavbar: true,
