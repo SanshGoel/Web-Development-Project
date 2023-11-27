@@ -34,19 +34,20 @@ it('positive : /login', done => {
     chai
       .request(server)
       .post('/login')
-      .send({username: 'john', password: '1234'})
+      .send({username: 'user123', password: 'pass123'})
       .end((err, res) => {
+        //expect(res.body).to.have.property('accessToken');
         expect(res).to.have.status(200);
         done();
       });
   });
 
-//We are checking POST /add_user API by passing the user info in in incorrect manner (name cannot be an integer). This test case should pass and return a status 200 along with a "Invalid input" message.
+//We are checking POST /add_user API by passing the user info in in incorrect manner (name cannot be an integer). This test case should pass and return a status 400 along with a "Invalid input" message.
 it('Negative : /login. Checking invalid name', done => {
   chai
     .request(server)
     .post('/login')
-    .send({username: '@123', password: '9876'})
+    .send({username: 'invalidUser', password: 'invalidPassword'})
     .end((err, res) => {
       expect(res).to.have.status(400);
       done();
