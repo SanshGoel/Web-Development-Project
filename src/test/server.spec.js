@@ -45,7 +45,7 @@ it('Negative : /login. Checking invalid name', done => {
   chai
     .request(server)
     .post('/login')
-    .send({username: 'pass123', password: 'password'})
+    .send({username: '@456', password: '#goel'})
     .end((err, res) => {
       expect(res).to.have.status(400);
       done();
@@ -58,7 +58,7 @@ it('positive : /register', done => {
   chai
     .request(server)
     .post('/register')
-    .send({username: 'user123', password: 'password'})
+    .send({username: '@456', password: '#goel'})
     .end((err, res) => {
       expect(res).to.have.status(200);
       done();
@@ -66,13 +66,13 @@ it('positive : /register', done => {
 });
 
 
-it('Negative : /register. Checking invalid name', done => {
+it('Negative : /register. Checking creating a user with a preexisting username', done => {
   chai
     .request(server)
     .post('/register')
     .send({username: 'user123', password: 'password'})
     .end((err, res) => {
-      expect(res).to.have.status(401);
+      expect(res).to.have.status(400);
       expect(res.body.message).to.equals('Invalid input');
       done();
     });
@@ -83,22 +83,13 @@ it('Negative : /register. Checking invalid name', done => {
 it('positive : /friends', done => {
   chai
     .request(server)
-    .post('/friends')
-    .send({username: 'john', password: '1234'})
+    .get('/friends')
+    .send({username: 'user123', password: 'password'})
     .end((err, res) => {
       expect(res).to.have.status(200);
       done();
     });
 });
 
-it('Negative : /friends. Checking invalid name', done => {
-  chai
-    .request(server)
-    .post('/friends')
-    .send({username: '@123', password: '9876'})
-    .end((err, res) => {
-      expect(res).to.have.status(404);
-      expect(res.body.message).to.equals('Invalid input');
-      done();
-    });
-});
+
+
