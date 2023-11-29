@@ -70,7 +70,7 @@ app.post('/login',(req, res) => {
                 return
             }
 
-            if (data.length == 0) {
+            if (data.length === 0) {
                 res.status(400).render('pages/login',{
                     error: true,
                     message: "username or password may be incorrect",
@@ -136,7 +136,7 @@ app.post('/register', async (req, res) => {
         `
 
         const preexistingUsers = await db.query(preexistingCheck, [username])
-        if (!preexistingUsers || !Array.isArray(preexistingUsers) || preexistingUsers.length > 0) {
+        if (username === "" || password === "" || !preexistingUsers || !Array.isArray(preexistingUsers) || preexistingUsers.length > 0) {
             res.status(400).render('pages/register',{
                 omitNavbar: true,
                 customBodyWidthEM: 60,
