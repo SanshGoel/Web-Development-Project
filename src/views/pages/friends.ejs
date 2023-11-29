@@ -5,6 +5,9 @@
 
 <script src="../../resources/js/friends.js"></script>
 
+<% locals.isFriendQueryOnly = true%>
+<%- include('../partials/search') %>
+<div class="search-spacer"></div>
 <div class="container" style="width: 100%; margin: auto; display: flex; flex-wrap: wrap;">
     <div id="friendsList-panel">
         <% if (locals.friends && Array.isArray(locals.friends)) locals.friends.forEach((friend) => { %>
