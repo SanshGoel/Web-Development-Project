@@ -112,7 +112,7 @@ app.get('/edit-account', (req, res) => {
     // Check if user is logged in
     if (req.session.user) {
         // Render the registration page and pass user details to the template
-        res.status(200).render('pages/account', {
+        res.status(200).render('pages/edit-account', {
             omitNavbar: false,
             customBodyWidthEM: 60,
             fartherFromTop: true,
@@ -186,16 +186,27 @@ app.post('/edit-account', async (req, res) => {
             UPDATE users
             SET display_name = $2, phone = $3, email = $4, bio = $5
             WHERE username = $1
-            RETURNING user_id
+            RETURNING *;
         `;
 
         const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio]);
 
         // Check if the update was successful
         if (result && Array.isArray(result) && result.length === 1) {
-            const userId = result[0].user_id;
-            console.log("Updated user details for user_id: " + userId);
-            res.redirect('/edit-account');
+            const updatedUserDetails = result[0];
+            console.log("Updated user details for user_id: " + updatedUserDetails.user_id);
+
+            // Update session user with the most recent details
+            req.session.user = updatedUserDetails;
+            req.session.save();
+
+            // Render the template with the updated user details from the session
+            res.render('pages/edit-account', {
+                omitNavbar: false,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                user: req.session.user
+            });
         } else {
             console.log("Failed to update user details");
             res.redirect('/edit-account');
@@ -205,6 +216,7 @@ app.post('/edit-account', async (req, res) => {
         res.redirect('/edit-account');
     }
 });
+
 
 
 
