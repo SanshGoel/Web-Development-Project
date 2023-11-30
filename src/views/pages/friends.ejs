@@ -1,37 +1,36 @@
 <%- include ('../partials/head') %>
 
-<% //locals.friends = [{user_id: 1, displayName: "Thing 1", status: "high on coffee"}, {user_id: 2, displayName: "Thing 2", status: "took 1 too many naps this week"}] %>
-<% //locals.currentFriend = {friendId: 1, displayName: "Thing 1", status: "high on coffee", email: "thing.one@example.com", phone: "9254066126", bio: "A really energetic person"} %>
-
 <script src="../../resources/js/friends.js"></script>
 
-<% locals.isFriendQueryOnly = true%>
+<% locals.searchUsers = false%>
 <%- include('../partials/search') %>
 <div class="search-spacer"></div>
 <div class="container" style="width: 100%; margin: auto; display: flex; flex-wrap: wrap;">
     <div id="friendsList-panel">
         <% if (locals.friends && Array.isArray(locals.friends)) locals.friends.forEach((friend) => { %>
-            <div id="friends-list-item-<%- friend.user_id%>" friend-id="<%- friend.user_id%>" class="friends-list-item stretched-link text-decoration-none card"
-                 style="display: flex; flex-direction: row; padding: .5em;"
-                 onclick="
-                        fetch(`/friends?friendId=${this.getAttribute('friend-id')}`, {
-                            method: 'GET'
-                        })
-                        .then()
-                ">
-                <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;">
-                <div class="friends-list-body" style="padding-left: .7em;">
-                    <div class="friends-list-name" style="font-weight: bold;"><%- friend.displayName %></div>
-                    <div class="friends-list-status" style="font-size: .8em;"><%- friend.status %></div>
+            <form action="/search" method="post" name="friend-form-<%- friend.user_id%>" onsubmit="(e) => e.preventDefault();">
+                <input style="display: none;" name="searchAll" value="true" />
+                <input style="display: none;" name="pageSize" value="1000" />
+                <input style="display: none;" name="friendId" value="<%- friend.user_id%>" />
+                <div id="friends-list-item-<%- friend.user_id%>"
+                     class="friends-list-item stretched-link text-decoration-none card"
+                     style="display: flex; flex-direction: row; padding: .5em;"
+                     onclick="document.forms['friend-form-<%- friend.user_id%>'].submit();"
+                >
+                    <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;">
+                    <div class="friends-list-body" style="padding-left: .7em;">
+                        <div class="friends-list-name" style="font-weight: bold;"><%- friend.display_name %></div>
+                        <div class="friends-list-status" style="font-size: .8em;"><%- friend.status %></div>
+                    </div>
                 </div>
-            </div>
+            </form>
         <% }) %>
     </div>
     <div>
         <div id="current-friend-display" class="card">
             <% if (locals.currentFriend) { %>
                 <img id="current-friend-image" class="rounded-circle shadow-4-strong">
-                <div class="current-friend-display-name"><%- locals.currentFriend && locals.currentFriend.displayName ? locals.currentFriend.displayName : " " %></div>
+                <div class="current-friend-display-name"><%- locals.currentFriend && locals.currentFriend.display_name ? locals.currentFriend.display_name : " " %></div>
                 <label class="current-friend-label">Status</label>
                 <div class="current-friend-field"><%- locals.currentFriend && locals.currentFriend.status ? locals.currentFriend.status : " " %></div>
                 <label class="current-friend-label">Email</label>

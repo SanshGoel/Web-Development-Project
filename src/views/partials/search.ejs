@@ -1,5 +1,5 @@
-<form style="display: flex" method="get">
-    <input style="display: none;" name="isFriendsOnly" value="<%- !!locals.isFriendQueryOnly %>" />
-    <input class="styled-input rounded" type="text" name="search" style="width: 100%; margin-right: 1em; margin-left: 1em;" placeholder="Search" />
+<form action="/search" style="display: flex" method="post">
+    <input style="display: none;" name="searchUsers" value="<%- !!locals.searchUsers %>" />
+    <input class="styled-input rounded" type="text" name="searchQuery" style="width: 100%; margin-right: 1em; margin-left: 1em;" placeholder="Search" />
     <button class="btn styled-button" type="submit">Search</button>
 </form>
