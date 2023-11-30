@@ -94,7 +94,7 @@ app.post('/login',(req, res) => {
             }
 
 
-            res.status(200).render('/login',{
+            res.status(200).render('pages/login',{
                 error: true,
                 message: "username or password may be incorrect",
                 omitNavbar: true,
