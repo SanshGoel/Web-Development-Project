@@ -1,10 +1,8 @@
 # ContactMI
 
-○ Description
-    ContactMi is like Facebook but with contact information only. Users can enter their contact info on their personal profile page and make themselves visible to other users on the meet person page. Their home pages show a searchable list of users with a search bar and a favorite users display. Each user displayed on the home page shows their contact information and other profile information. Users will use their username and password to login on the login page, and all pages will have a logout button.
+## Description
 
-    This app is different from traditional social media because it is narrowly focused on storing information to contact users in other ways in a streamlined manner. It functions like a yellow book rather than an endorphin trap to make ad revenue like traditional social media.
-
+ContactMi is a platform resembling Facebook but exclusively focuses on contact information sharing. Users can input their contact details on their profile pages and set visibility on the "meet person" section. The home page features a searchable list of users, a favorites display, and detailed user profiles. Login credentials are used for access, and a logout button is available on all pages. This platform diverges from traditional social media, emphasizing streamlined contact sharing over revenue generation through ads.
 
 ## Contributors
 
@@ -15,38 +13,31 @@
 - Adan Esparza - [@UESAdan](https://github.com/UESAdan) - ades4326@colorado.edu
 - Tanmay Meti - [@Tanmay-Meti](https://github.com/Tanmay-Meti) - tame4633@colorado.edu
 
-○ Technology Stack used for the project
+## Technology Stack
 
-    •Frontend:
-        •EJS (Embedded JavaScript):
-            •EJS is a templating engine used for server-side rendering in the ContactMi application. It dynamically generates HTML pages, allowing users to view and interact with their personal profiles, search for other users, and manage favorites.
+### Frontend
 
-        •JavaScript:
-            •JavaScript enhances the interactivity of the ContactMi frontend, enabling features like dynamic page updates, form validation, and asynchronous communication with the backend.
-            
-        •CSS (Cascading Style Sheets):
-            •CSS styles are applied to the HTML elements, ensuring a visually appealing and user-friendly interface for ContactMi. The styling helps create a streamlined and intuitive experience for users.
+- **EJS (Embedded JavaScript):** Server-side rendering engine for dynamic HTML page generation facilitating user profiles, search functionality, and favorites management.
+- **JavaScript:** Enhances interactivity with features like dynamic updates, form validation, and asynchronous backend communication.
+- **CSS (Cascading Style Sheets):** Applies styles for a visually appealing and user-friendly interface.
 
-    •Backend:
-        •Node.js with Express:
-            •Node.js powers the server-side logic of ContactMi, while Express provides a robust framework for building web applications. Together, they handle user authentication, profile management, and data retrieval from the PostgreSQL database.
+### Backend
 
-        •PostgreSQL Database:
-            •PostgreSQL serves as the database management system for storing user profiles, contact information, and other relevant data. It ensures data persistence and retrieval for ContactMi's functionality.
+- **Node.js with Express:** Powers server-side logic, managing user authentication, profiles, and PostgreSQL database interactions.
+- **PostgreSQL Database:** Stores user profiles, contact details, and related data ensuring data persistence.
 
-    •Other Tools:
-        •Docker:
-            •Docker is used for containerization in ContactMi, simplifying deployment and ensuring consistency across different environments. It encapsulates the application and its dependencies, making it easier to manage and scale.
+### Other Tools
 
+- **Docker:** Utilized for containerization, streamlining deployment, and ensuring consistent application behavior across diverse environments.
 
+## Prerequisites
 
-○ Prerequisites
-    •To run the ContactMi application locally, ensure you have the following software installed on your machine:
-        •Docker: Install Docker on your system. 
-        •Git: Install git on your system.
+To run ContactMi locally, ensure you have the following software installed:
 
+- Docker: Install Docker on your system.
+- Git: Install git on your system.
 
-○ Instructions for Running Locally
+## Instructions for Running Locally
     •Clone the Repository:
         •git clone https://github.com/vidhaansinghvi/ContactMI.git
         •cd ContactMI
