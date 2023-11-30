@@ -302,61 +302,112 @@ app.get("/logout", (req, res) => {
 // Search Friends
 app.post('/search', async (req, res) => {
     try {
-        const { searchQuery, page = 1, pageSize = 10, userId } = req.body;
+        const searchQuery = req.body.searchQuery
+        const page = req.body.page ? req.body.page : 1
+        const pageSize = req.body.pageSize ? req.body.pageSize : 10
+        const searchAll = !!req.body.searchAll || searchQuery === ""
+        const offset = (page - 1) * pageSize
 
-        
-        const offset = (page - 1) * pageSize;
+        const searchUsers = !!req.body.searchUsers && (req.body.searchUsers !== "false")
 
-        let searchFriendsQuery, result;
-
-        if (req.params.searchUsers) {
-            // Search all users with pagination, considering display_name, email, and phone
-            searchFriendsQuery = `
-                SELECT users.*, headshot.img
-                FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
-                WHERE LOWER(display_name) = LOWER($1)
-                   OR LOWER(email) = LOWER($1)
-                   OR LOWER(phone) = LOWER($1)
-                ORDER BY display_name
-                LIMIT $2 OFFSET $3
-            `;
-
-            result = await db.query(searchFriendsQuery, [searchQuery, pageSize, offset]);
-        } else {
-            // Search friends with pagination, considering display_name, email, and phone
-            searchFriendsQuery = `
-                SELECT users.*, headshot.img
-                FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
-                WHERE (LOWER(display_name) = LOWER($1)
-                   OR LOWER(email) = LOWER($1)
-                   OR LOWER(phone) = LOWER($1))
-                   AND users.user_id IN (
-                       SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
-                       UNION
-                       SELECT user_id_2 AS user_id FROM friends WHERE user_id_1 = $2
-                   )
-                ORDER BY display_name
-                LIMIT $3 OFFSET $4
-            `;
-
-            result = await db.query(searchFriendsQuery, [searchQuery, userId, pageSize, offset]);
+        if (!searchAll && !searchQuery) {
+            res.status(400).render( searchUsers ? 'pages/users' : 'pages/friends', {
+                friends: {},
+                error: true,
+                message: "Bad request. If this error persists, please reach out to customer service"
+            })
+            return
         }
 
-        res.status(200).json({
-            status: 'success',
-            message: 'Search successful',
-            data: result,
-        });
+        if (searchUsers) {
+            // Search all users with pagination, considering display_name, email, and phone
+            searchAllUsersQuery = searchAll ? `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                ORDER BY display_name
+                --LIMIT $2 OFFSET $3
+            ` : `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                WHERE LOWER(display_name) LIKE '%' || LOWER($1) || '%'
+                    OR LOWER(email) LIKE '%' || LOWER($1) || '%'
+                    OR LOWER(phone) LIKE '%' || LOWER($1) || '%'
+                ORDER BY display_name
+                --LIMIT $2 OFFSET $3
+            `
+
+            const result = await db.query(searchAllUsersQuery, [searchQuery, pageSize, offset])
+
+            if (!result || !Array.isArray(result)) {
+                res.status(500).render('pages/users', {
+                    friends: {},
+                    error: true,
+                    message: "Could not resolve users in database. If this error persists, please reach out to customer service"
+                })
+                return
+            }
+
+            res.status( 200).render('pages/users', {
+                friends: result
+            })
+
+        } else {
+            // Search friends with pagination, considering display_name, email, and phone
+            searchFriendsQuery = searchAll ? `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                WHERE users.user_id IN (
+                    SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
+                )
+                ORDER BY display_name
+                --LIMIT $2 OFFSET $3
+            ` : `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                WHERE (LOWER(display_name) LIKE '%' || LOWER($1) || '%'
+                    OR LOWER(email) LIKE '%' || LOWER($1) || '%'
+                    OR LOWER(phone) LIKE '%' || LOWER($1) || '%')
+                    AND users.user_id IN (
+                        SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
+                    )
+                ORDER BY display_name
+                --LIMIT $3 OFFSET $4
+            `
+
+            const result = await db.query(searchFriendsQuery, [searchQuery, req.session.user.user_id, pageSize, offset]);
+
+            if (!result || !Array.isArray(result)) {
+                res.status(500).render('pages/friends', {
+                    friends: {},
+                    error: true,
+                    message: "Could not resolve friends in database. If this error persists, please reach out to customer service"
+                })
+                return
+            }
+
+            let currentFriend = undefined
+            const currentFriendId = req.body.friendId
+            result.forEach((friend) => {
+                if (friend.user_id == currentFriendId) currentFriend = friend
+            })
+
+            res.status( 200).render('pages/friends', {
+                friends: result,
+                currentFriend: currentFriend
+            })
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error',
-        });
+        console.error(error)
+        res.status(500).render('pages/friends',{
+            error: true,
+            message: 'Could not resolve users in search route. If this error persists, please reach out to customer service',
+        })
     }
-});
+})
 
 // start the server
 module.exports = app.listen(3000)
