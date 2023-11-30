@@ -38,13 +38,13 @@ To run ContactMi locally, ensure you have the following software installed:
 - Git: Install git on your system.
 
 ## Instructions for Running Locally
-    •Clone the Repository:
+    - **Clone the Repository**
         •git clone https://github.com/vidhaansinghvi/ContactMI.git
         •cd ContactMI
 
-    •Create Environment Variables:
+    - **Create Environment Variables**
 
-    •Create a .env file in the project root directory.
+    - **Create a .env file in the project root directory**
         •Add the necessary environment variables required for both the database and Node.js application:
             # database credentials
             POSTGRES_USER="postgres"
@@ -55,21 +55,22 @@ To run ContactMi locally, ensure you have the following software installed:
             SESSION_SECRET="super duper secret!"
             API_KEY="<API key you just created>"
 
-    •Build and Start Docker Containers:
+    - **Build and Start Docker Containers**
         •Run the following command to build and start the Docker containers:
             docker-compose up --build
             # This command will initialize the PostgreSQL database and start the Node.js application.
 
-    •Access the Application:
+    - **Access the Application**
 
         •Once the containers are up and running, you can access the application by navigating to http://localhost:3000 in your web browser.
 
-    •Terminating the Application:
+    - **Terminating the Application**
         •To stop and remove the Docker containers, press Ctrl+C in the terminal where Docker is running, and then run: 
         •(use the -v flag to clean up volumes)
             docker-compose down 
 
-○ How to run the tests
+## How to run the tests
 
-○ Link to the deployed application
+
+## Link to the deployed application
     •http://localhost:3000/
