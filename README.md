@@ -6,13 +6,14 @@
     This app is different from traditional social media because it is narrowly focused on storing information to contact users in other ways in a streamlined manner. It functions like a yellow book rather than an endorphin trap to make ad revenue like traditional social media.
 
 
-○ Contributors (Full name - Github Username - Email)
-    •Vidhaan Singhvi - vidhaansinghvi
-    •Samuel Beste - sbeste11 - samuel.beste@colorado.edu 
-    •Sansh Goel- Sansh28 - sago1198@colorado.edu
-    •Nikhil Bailey - NikhilBailey21 - nikhil.bailey@colorado.edu
-    •Adan Esparza - UESAdan - ades4326@colorado.edu
-    •Tanmay Meti -Tanmay-Meti - tame4633@colorado.edu
+## Contributors
+
+- Vidhaan Singhvi - [@vidhaansinghvi](https://github.com/vidhaansinghvi)
+- Samuel Beste - [@sbeste11](https://github.com/sbeste11) - samuel.beste@colorado.edu
+- Sansh Goel - [@Sansh28](https://github.com/Sansh28) - sago1198@colorado.edu
+- Nikhil Bailey - [@NikhilBailey21](https://github.com/NikhilBailey21) - nikhil.bailey@colorado.edu
+- Adan Esparza - [@UESAdan](https://github.com/UESAdan) - ades4326@colorado.edu
+- Tanmay Meti - [@Tanmay-Meti](https://github.com/Tanmay-Meti) - tame4633@colorado.edu
 
 ○ Technology Stack used for the project
 
