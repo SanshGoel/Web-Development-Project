@@ -78,11 +78,11 @@ app.post('/login',(req, res) => {
                 req.session.user = data[0]
                 req.session.save()
 
-                res.redirect('pages/home')
+                res.redirect('/home')
                 return
             }
 
-            res.status(200).render('pages/login',{
+            res.status(200).render('/login',{
                 error: true,
                 message: "username or password may be incorrect",
                 omitNavbar: true,
@@ -188,18 +188,18 @@ const auth = (req, res, next) => {
 // Authentication Required
 app.use(auth)
 
-app.get('/home', auth, (req, res) => {
+app.get('/home', (req, res) => {
     const { user_id, display_name, phone, email, profile_image } = req.session.user;
     
     
-    res.render('pages/home', {
-    userID: user_id,
-    displayName: display_name,
-    phoneNumber: phone,
-    email: email,
-    profileImage: profile_image || '/images/default-profile.png'
-    });
-    });
+    res.status(200).render('pages/home', {
+        userID: user_id,
+        displayName: display_name,
+        phoneNumber: phone,
+        email: email,
+        profileImage: profile_image || '/images/default-profile.png'
+    })
+})
         
 
 app.get('/friends', (req, res) => {
