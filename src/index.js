@@ -89,11 +89,12 @@ app.post('/login',(req, res) => {
                 req.session.user = data[0]
                 req.session.save()
 
-                res.redirect('pages/home')
+                res.redirect('/home')
                 return
             }
 
-            res.status(400).render('pages/login',{
+
+            res.status(200).render('/login',{
                 error: true,
                 message: "username or password may be incorrect",
                 omitNavbar: true,
@@ -237,8 +238,18 @@ const auth = (req, res, next) => {
 app.use(auth)
 
 app.get('/home', (req, res) => {
-
+    const { user_id, display_name, phone, email, profile_image } = req.session.user;
+    
+    
+    res.status(200).render('pages/home', {
+        userID: user_id,
+        displayName: display_name,
+        phoneNumber: phone,
+        email: email,
+        profileImage: profile_image || '/images/default-profile.png'
+    })
 })
+        
 
 app.get('/friends', (req, res) => {
 
@@ -350,5 +361,3 @@ app.post('/search', async (req, res) => {
 // start the server
 module.exports = app.listen(3000)
 console.log('Server is listening on port 3000')
-
-

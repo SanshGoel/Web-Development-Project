@@ -1,0 +1,25 @@
+<%- include ('../partials/head') %>
+<script src="../../resources/js/friends.js"></script>
+<div class="container" style="width: 100%; margin: auto; display: flex; flex-wrap: wrap;">
+    <div class="profile-card">
+        <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Display Name</h2>
+            <a href="/edit-account" style="text-align: right;">Edit</a>
+        </div>
+        <div class="profile-info">
+            <p><strong>User ID:</strong> <%= userID %></p>
+            <p><strong>Phone Number:</strong> <%= phoneNumber %></p>
+            <p><strong>Email:</strong> <%= email %></p>
+        </div>
+        <div class="profile-image">
+            <img src="<%= profileImage %>" alt="Profile Image">
+        </div>
+    </div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">SEARCH</button>
+    </form>
+</div>
+<%- include ('../partials/footer') %>
