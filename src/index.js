@@ -65,8 +65,19 @@ app.post('/login',(req, res) => {
     db.query(loginQuery, [usernameQueryParam])
         .then(async (data) => {
 
-            if (!data || !Array.isArray(data) || !data.length || data.length !== 1) {
+            if (!data || !Array.isArray(data) || data.length > 1) {
                 res.redirect( '/register')
+                return
+            }
+
+            if (data.length === 0) {
+                res.status(400).render('pages/login',{
+                    error: true,
+                    message: "username or password may be incorrect",
+                    omitNavbar: true,
+                    customBodyWidthEM: 60,
+                    fartherFromTop: true
+                })
                 return
             }
 
@@ -81,6 +92,7 @@ app.post('/login',(req, res) => {
                 res.redirect('/home')
                 return
             }
+
 
             res.status(200).render('/login',{
                 error: true,
@@ -101,7 +113,7 @@ app.get('/edit-account', (req, res) => {
     // Check if user is logged in
     if (req.session.user) {
         // Render the registration page and pass user details to the template
-        res.status(200).render('pages/account', {
+        res.status(200).render('pages/edit-account', {
             omitNavbar: false,
             customBodyWidthEM: 60,
             fartherFromTop: true,
@@ -117,6 +129,25 @@ app.post('/register', async (req, res) => {
     try {
         const { username, password, display_name, phone, email, bio } = req.body;
 
+        //Check if a user already exists with that name
+        const preexistingCheck = `
+            SELECT * 
+            FROM users 
+            WHERE username = $1
+        `
+
+        const preexistingUsers = await db.query(preexistingCheck, [username])
+        if (username === "" || password === "" || !preexistingUsers || !Array.isArray(preexistingUsers) || preexistingUsers.length > 0) {
+            res.status(400).render('pages/register',{
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                error: true,
+                message: "username already exists"
+            })
+            return
+        }
+
         // Hash the password using bcrypt library
         const hash = await bcrypt.hash(password, 10);
 
@@ -125,22 +156,28 @@ app.post('/register', async (req, res) => {
             INSERT INTO users (username, password, display_name, phone, email, bio)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING user_id
-        `;
+        `
 
-        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio]);
-
-        // console.log(req.body); 
-        // console.log("Result of the INSERT query:", result);
-
+        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio])
+        if(!result || !Array.isArray(result) || result.length < 1) {
+            res.status(400).render('pages/register',{
+                omitNavbar: true,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                error: true,
+                message: "could not resolve UserId in database. If this error persists, please reach out to our support team"
+            })
+            return
+        }
         const userId = result[0].user_id;
 
-        console.log("Registered: " + username + " with user_id: " + userId);
-        res.redirect('/login');
+        console.log("Registered: " + username + " with user_id: " + userId)
+        res.redirect('/login')
     } catch (error) {
-        console.error(error);
-        res.redirect('/register');
+        console.error(error)
+        res.redirect('/register')
     }
-});
+})
 
 app.post('/edit-account', async (req, res) => {
     try {
@@ -150,16 +187,27 @@ app.post('/edit-account', async (req, res) => {
             UPDATE users
             SET display_name = $2, phone = $3, email = $4, bio = $5
             WHERE username = $1
-            RETURNING user_id
+            RETURNING *;
         `;
 
         const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio]);
 
         // Check if the update was successful
         if (result && Array.isArray(result) && result.length === 1) {
-            const userId = result[0].user_id;
-            console.log("Updated user details for user_id: " + userId);
-            res.redirect('/edit-account');
+            const updatedUserDetails = result[0];
+            console.log("Updated user details for user_id: " + updatedUserDetails.user_id);
+
+            // Update session user with the most recent details
+            req.session.user = updatedUserDetails;
+            req.session.save();
+
+            // Render the template with the updated user details from the session
+            res.render('pages/edit-account', {
+                omitNavbar: false,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                user: req.session.user
+            });
         } else {
             console.log("Failed to update user details");
             res.redirect('/edit-account');
@@ -169,6 +217,7 @@ app.post('/edit-account', async (req, res) => {
         res.redirect('/edit-account');
     }
 });
+
 
 
 
@@ -247,6 +296,67 @@ app.get("/logout", (req, res) => {
     req.session.destroy();
     res.status(200).render('pages/logout',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true});
   });
+
+  // Search feature for finding friends- still need to verify with test cases(vidhaan)
+
+// Search Friends
+app.post('/search', async (req, res) => {
+    try {
+        const { searchQuery, page = 1, pageSize = 10, userId } = req.body;
+
+        
+        const offset = (page - 1) * pageSize;
+
+        let searchFriendsQuery, result;
+
+        if (req.params.searchUsers) {
+            // Search all users with pagination, considering display_name, email, and phone
+            searchFriendsQuery = `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                WHERE LOWER(display_name) = LOWER($1)
+                   OR LOWER(email) = LOWER($1)
+                   OR LOWER(phone) = LOWER($1)
+                ORDER BY display_name
+                LIMIT $2 OFFSET $3
+            `;
+
+            result = await db.query(searchFriendsQuery, [searchQuery, pageSize, offset]);
+        } else {
+            // Search friends with pagination, considering display_name, email, and phone
+            searchFriendsQuery = `
+                SELECT users.*, headshot.img
+                FROM users
+                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                WHERE (LOWER(display_name) = LOWER($1)
+                   OR LOWER(email) = LOWER($1)
+                   OR LOWER(phone) = LOWER($1))
+                   AND users.user_id IN (
+                       SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
+                       UNION
+                       SELECT user_id_2 AS user_id FROM friends WHERE user_id_1 = $2
+                   )
+                ORDER BY display_name
+                LIMIT $3 OFFSET $4
+            `;
+
+            result = await db.query(searchFriendsQuery, [searchQuery, userId, pageSize, offset]);
+        }
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Search successful',
+            data: result,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error',
+        });
+    }
+});
 
 // start the server
 module.exports = app.listen(3000)

@@ -60,3 +60,18 @@
     font-size: .6em
 }
 
+.styled-input {
+    border: 1px solid #964A99;
+    padding-left: 1em;
+    padding-top: .3em;
+    padding-bottom: .3em;
+}
+
+.styled-button {
+    width: 30%;
+    background-color: #34AAEB;
+}
+
+.search-spacer {
+    height: 2em;
+}
