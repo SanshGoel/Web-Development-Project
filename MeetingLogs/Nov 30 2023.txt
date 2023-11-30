@@ -1,0 +1,12 @@
+Tasks/Meeting Notes - Nov 16 2023
+Group task: Work on Presentation
+User acceptance tests - execute and get results
+
+Individual Tasks:
+
+Vidhaan Singhvi - Find new task
+Tanmay meti - Find new task
+Sansh Goel - Find new task
+Nikhil Bailey - Send friend request feature
+Sam Beste - Accept/reject friend request feature
+Adan Esparza - Profile Headshots
