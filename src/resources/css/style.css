@@ -75,3 +75,14 @@
 .search-spacer {
     height: 2em;
 }
+
+.friend-request-actions form:nth-child(1) button {
+    background-color: #34AAEB; 
+    color: #ffffff; 
+}
+
+/* Reject button style */
+.friend-request-actions form:nth-child(2) button {
+    background-color: #EB9B34; 
+    color: #ffffff; 
+}
