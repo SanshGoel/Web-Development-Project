@@ -1,0 +1,33 @@
+<%- include ('../partials/head') %>
+
+<% locals.searchUsers = true %>
+<%- include('../partials/search') %>
+<div class="search-spacer"></div>
+<div class="container" style="width: 100%; margin: auto; display: flex; flex-wrap: wrap;">
+    <div id="friendsList-panel">
+        <% if (locals.friends && Array.isArray(locals.friends)) locals.friends.forEach((friend) => { %>
+                <div id="friends-list-item-<%- friend.user_id%>"
+                     class="friends-list-item text-decoration-none card"
+                     style="display: flex; flex-direction: row; padding: .5em;"
+                >
+                    <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;">
+                    <div class="friends-list-body" style="padding-left: .7em;">
+                        <div class="friends-list-name" style="font-weight: bold;"><%- friend.display_name %></div>
+                        <div class="friends-list-status" style="font-size: .8em;"><%- friend.status %></div>
+                    </div>
+                    <button class="btn styled-button" style="margin-left: auto;" onclick="
+                        fetch('/addFriend', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application.json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({friendToAdd: <%- friend.user_id %>})
+                        })
+                    ">Add Friend</button>
+                </div>
+        <% }) %>
+    </div>
+</div>
+
+<%- include ('../partials/footer') %>

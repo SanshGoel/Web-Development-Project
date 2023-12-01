@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session') // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt') //  To hash passwords
 const axios = require('axios')
+const {add} = require("nodemon/lib/rules")
 
 // database configuration
 const dbConfig = {
@@ -248,6 +249,66 @@ app.get('/home', (req, res) => {
         email: email,
         profileImage: profile_image || '/images/default-profile.png'
     })
+})
+
+app.post('/addFriend', (req, res) => {
+    const { user_id } = req.session.user
+    const friendToAdd = req.body.friendToAdd
+    console.log(friendToAdd)
+
+    if (!friendToAdd) {
+        res.status(400).json({
+            error: true,
+            message: "Failed to specify which friend. If this error persists, please reach out to customer support."
+        })
+        return
+    }
+
+    const checkIfFriendReqExists = `
+        SELECT *
+        FROM pending_friends
+        WHERE requester_id = $1
+        AND requestee_id = $2
+    `
+
+    db.query(checkIfFriendReqExists, [user_id, friendToAdd])
+        .then((data) => {
+            if (!data || !Array.isArray(data)) {
+                res.status(500).send({
+                    friends: {},
+                    error: true,
+                    message: "could not resolve friend request in database. If this error persists, please reach out to customer service"
+                })
+                return
+            }
+
+            if (data.length === 0) {
+                const addFriendRequestQuery = `
+                    INSERT INTO pending_friends (requester_id, requestee_id) 
+                    VALUES ($1, $2)
+                `
+
+                db.query(addFriendRequestQuery, [user_id, friendToAdd])
+                    .then(() => res.status(200).json({
+                        error: false,
+                        message: "Friend request sent"
+                    }))
+                    .catch(() => res.status(500).json({
+                        error: true,
+                        message: "Failed to add friend request. If this error persists, please reach out to customer support."
+                    }))
+                return
+            }
+
+            res.status(200).json({
+                error: false,
+                message: "Friend request sent"
+            })
+        })
+        .catch(() => res.status(500).json({
+            error: true,
+            message: "Failed to add friend request. If this error persists, please reach out to customer support."
+        }))
 })
         
 app.get('/friends', (req, res) => {
