@@ -433,7 +433,7 @@ app.post('/acceptFriendRequest', async (req, res) => {
 
         const addFriendQuery = `
             INSERT INTO friends (user_id_1, user_id_2)
-            VALUES ($1, $2);
+            VALUES ($1, $2), ($2, $1);
         `;
         await db.query(addFriendQuery, [requesterId, requesteeId]);
 
