@@ -250,47 +250,58 @@ app.get('/home', (req, res) => {
     })
 })
         
-
 app.get('/friends', (req, res) => {
+    const user_id = req.session.user.user_id;
 
-    const currentFriendId = req.params.friendId
-    const hasCurrentFriend = !!currentFriendId
-
-    const user_id = req.session.user.user_id
-    const friendsQuery = `SELECT * FROM friends f INNER JOIN users u ON u.user_id = f.user_id_1 WHERE f.user_id_2 = $1`
+    const friendsQuery = `
+        SELECT * FROM friends f
+        INNER JOIN users u ON u.user_id = f.user_id_1
+        WHERE f.user_id_2 = $1
+    `;
 
     db.query(friendsQuery, [user_id])
-        .then((data) => {
+        .then((friendsData) => {
 
-            if (!data || !Array.isArray(data)) {
-                res.status(500).render('pages/friends', {
-                    friends: {},
-                    error: true,
-                    message: "could not resolve friends in database. If this error persists, please reach out to customer service"
-                })
-                return
-            }
+            const pendingRequestsQuery = `
+                SELECT * FROM pending_friends p
+                INNER JOIN users u ON u.user_id = p.requester_id
+                WHERE p.requestee_id = $1
+            `;
 
-            let currentFriend = undefined
-            data.forEach((friend) => {
-                if (friend.user_id === currentFriendId) currentFriend = friend
-            })
+            return db.query(pendingRequestsQuery, [user_id])
+                .then((pendingRequestsData) => {
 
-            res.status(200).render('pages/friends',{
+                    return {
+                        friends: friendsData,
+                        pendingRequests: pendingRequestsData,
+                    };
+                });
+        })
+        .then(({ friends, pendingRequests }) => {
+            let currentFriend = undefined;
+            const currentFriendId = req.body.friendId;
+
+            friends.forEach((friend) => {
+                if (friend.user_id === currentFriendId) currentFriend = friend;
+            });
+
+            res.status(200).render('pages/friends', {
                 currentFriend: currentFriend,
-                friends: data
-            })
-
+                friends: friends,
+                pendingRequests: pendingRequests,
+            });
         })
         .catch((error) => {
-            console.log(error)
-            res.status(500).send({
+            console.error(error);
+            res.status(500).render('pages/friends', {
                 friends: {},
                 error: true,
-                message: "could not resolve friends in database. If this error persists, please reach out to customer service"
-            })
-        })
-})
+                message: "Could not resolve friends or pending friend requests in the database. If this error persists, please reach out to customer service",
+            });
+        });
+});
+
+
 
 app.get("/logout", (req, res) => {
     req.session.destroy();
@@ -408,6 +419,48 @@ app.post('/search', async (req, res) => {
         })
     }
 })
+
+app.post('/acceptFriendRequest', async (req, res) => {
+    try {
+        const requesterId = req.body.requesterId;
+        const requesteeId = req.session.user.user_id;
+
+        const deletePendingRequestQuery = `
+            DELETE FROM pending_friends
+            WHERE requester_id = $1 AND requestee_id = $2;
+        `;
+        await db.query(deletePendingRequestQuery, [requesterId, requesteeId]);
+
+        const addFriendQuery = `
+            INSERT INTO friends (user_id_1, user_id_2)
+            VALUES ($1, $2);
+        `;
+        await db.query(addFriendQuery, [requesterId, requesteeId]);
+
+        res.redirect('/friends');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/rejectFriendRequest', async (req, res) => {
+    try {
+        const requesterId = req.body.requesterId;
+        const requesteeId = req.session.user.user_id;
+
+        const deletePendingRequestQuery = `
+            DELETE FROM pending_friends
+            WHERE requester_id = $1 AND requestee_id = $2;
+        `;
+        await db.query(deletePendingRequestQuery, [requesterId, requesteeId]);
+
+        res.redirect('/friends');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // start the server
 module.exports = app.listen(3000)
