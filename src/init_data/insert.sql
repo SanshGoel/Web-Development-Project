@@ -46,24 +46,27 @@ INSERT INTO pending_friends(requester_id, requestee_id) VALUES
  (11, 12),
  (20, 1);
 
-INSERT INTO headshot (user_id,img) VALUES
- (1,NULL),
- (2,NULL),
- (3,NULL),
- (4,NULL),
- (5,NULL),
- (6,NULL),
- (7,NULL),
- (8,NULL),
- (9,NULL),
- (10,NULL),
- (11,NULL),
- (12,NULL),
- (13,NULL),
- (14,NULL),
- (15,NULL),
- (16,NULL),
- (17,NULL),
- (18,NULL),
- (19,NULL),
- (20,NULL);
+INSERT INTO headshot (user_id,img_path) VALUES
+ (1,'uploads/user123.jpeg'),
+  (2,'uploads/OIP.jpeg'),
+ (3,'uploads/OIP.jpeg'),
+ (4,'uploads/OIP.jpeg'),
+ (5,'uploads/OIP.jpeg'),
+ (6,'uploads/OIP.jpeg'),
+ (7,'uploads/OIP.jpeg'),
+ (8,'uploads/OIP.jpeg'),
+ (9,'uploads/OIP.jpeg'),
+ (10,'uploads/OIP.jpeg'),
+ (11,'uploads/OIP.jpeg'),
+ (12,'uploads/OIP.jpeg'),
+ (13,'uploads/OIP.jpeg'),
+ (14,'uploads/OIP.jpeg'),
+ (15,'uploads/OIP.jpeg'),
+ (16,'uploads/OIP.jpeg'),
+ (17,'uploads/OIP.jpeg'),
+ (18,'uploads/OIP.jpeg'),
+ (19,'uploads/OIP.jpeg'),
+ (20,'uploads/OIP.jpeg');
+
+
+

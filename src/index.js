@@ -8,6 +8,21 @@ const bcrypt = require('bcrypt') //  To hash passwords
 const axios = require('axios')
 const {add} = require("nodemon/lib/rules")
 
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
 // database configuration
 const dbConfig = {
     host: 'db',
@@ -126,7 +141,7 @@ app.get('/edit-account', (req, res) => {
 });
 
 
-app.post('/register', async (req, res) => {
+app.post('/register', upload.single('image'), async (req, res) => {
     try {
         const { username, password, display_name, phone, email, bio } = req.body;
 
@@ -172,6 +187,19 @@ app.post('/register', async (req, res) => {
         }
         const userId = result[0].user_id;
 
+        if(req.file){
+            const imagePath = req.file.path;
+
+            // SQL query to insert or update the image path
+            const query = 'INSERT INTO headshot (user_id, img_path) VALUES ($1, $2)';
+            await db.query(query, [userId, imagePath]);
+        }else{
+            const imagePath = 'uploads/OIP.jpeg';
+            const query = 'INSERT INTO headshot (user_id, img_path) VALUES ($1, $2)';
+            await db.query(query, [userId, imagePath]);
+        }
+
+
         console.log("Registered: " + username + " with user_id: " + userId)
         res.redirect('/login')
     } catch (error) {
@@ -180,9 +208,10 @@ app.post('/register', async (req, res) => {
     }
 })
 
-app.post('/edit-account', async (req, res) => {
+app.post('/edit-account', upload.single('image'),async (req, res) => {
     try {
         const { username, display_name, phone, email, bio } = req.body;
+
 
         const userUpdateQuery = `
             UPDATE users
@@ -193,6 +222,18 @@ app.post('/edit-account', async (req, res) => {
 
         const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio]);
 
+        
+        if(req.file){
+            const imagePath = req.file.path;
+
+            // SQL query to insert or update the image path
+            const updateQuery = 'UPDATE headshot SET img_path = $1 WHERE user_id = $2'
+            await db.query(updateQuery, [imagePath, result[0].user_id]);
+        }
+
+        
+        
+   
         // Check if the update was successful
         if (result && Array.isArray(result) && result.length === 1) {
             const updatedUserDetails = result[0];
@@ -218,6 +259,26 @@ app.post('/edit-account', async (req, res) => {
         res.redirect('/edit-account');
     }
 });
+
+app.get('/user-image/:userId', async (req, res) => {
+    const userId = parseInt(req.params.userId); // Convert userId to a number
+
+    try {
+        const selectquery = 'SELECT img_path FROM headshot WHERE user_id = $1';
+        
+        const result = await db.query(selectquery, [userId]);
+        const fullpath = path.resolve(result[0].img_path);
+        res.sendFile(fullpath)// Adjust the path according to your directory structure
+
+       
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+app.use('/uploads', express.static('uploads'));
+
 
 
 
