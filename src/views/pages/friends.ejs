@@ -15,7 +15,7 @@
                      style="display: flex; flex-direction: row; padding: .5em;"
                      onclick="document.forms['friend-form-<%- friend.user_id%>'].submit();"
                 >
-                    <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;">
+                    <img class="rounded-circle shadow-4-strong" style="display: flex; justify-content: center; height: 3em; width: 3em;" src="/user-image/<%= friend.user_id %>">
                     <div class="friends-list-body" style="padding-left: .7em;">
                         <div class="friends-list-name" style="font-weight: bold;"><%- friend.display_name %></div>
                         <div class="friends-list-status" style="font-size: .8em;"><%- friend.status %></div>
@@ -27,7 +27,7 @@
     <div>
         <div id="current-friend-display" class="card">
             <% if (locals.currentFriend) { %>
-                <img id="current-friend-image" class="rounded-circle shadow-4-strong">
+                <img id="current-friend-image" class="rounded-circle shadow-4-strong" src="/user-image/<%= locals.currentFriend.user_id %>">
                 <div class="current-friend-display-name"><%- locals.currentFriend && locals.currentFriend.display_name ? locals.currentFriend.display_name : " " %></div>
                 <label class="current-friend-label">Status</label>
                 <div class="current-friend-field"><%- locals.currentFriend && locals.currentFriend.status ? locals.currentFriend.status : " " %></div>

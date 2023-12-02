@@ -455,15 +455,16 @@ app.post('/search', async (req, res) => {
         if (searchUsers) {
             // Search all users with pagination, considering display_name, email, and phone
             searchAllUsersQuery = searchAll ? `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 ORDER BY display_name
                 --LIMIT $2 OFFSET $3
-            ` : `
-                SELECT users.*, headshot.img
+            `
+                : `
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE LOWER(display_name) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(email) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(phone) LIKE '%' || LOWER($1) || '%'
@@ -489,18 +490,18 @@ app.post('/search', async (req, res) => {
         } else {
             // Search friends with pagination, considering display_name, email, and phone
             searchFriendsQuery = searchAll ? `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE users.user_id IN (
                     SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
                 )
                 ORDER BY display_name
                 --LIMIT $2 OFFSET $3
             ` : `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE (LOWER(display_name) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(email) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(phone) LIKE '%' || LOWER($1) || '%')
