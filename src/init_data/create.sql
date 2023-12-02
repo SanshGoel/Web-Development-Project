@@ -29,6 +29,6 @@ CREATE TABLE IF NOT EXISTS pending_friends(
 
 CREATE TABLE IF NOT EXISTS headshot(
     user_id INT,
-    img BYTEA
+    img_path VARCHAR(255)
 );
 

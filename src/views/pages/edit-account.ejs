@@ -2,7 +2,7 @@
 
 <div class="container" style="width: 80%; margin: auto;">
     <h1 style="position: relative; left: 150px;">ContactMi Account</h1>
-    <form action="/edit-account" method="POST">
+    <form action="/edit-account" method="POST"  enctype="multipart/form-data">
     
             <h2>Edit Details About Your Account</h2>
 
@@ -36,6 +36,12 @@
             <div style="margin-bottom: 1em;">
                 <label for="bio" style="margin-bottom: .5em;">Bio </label>
                 <input type="text" id="bio" name="bio" value="<%= user.bio %>" style="width: 100%;border: 1px solid #964A99;" placeholder="Describe yourself here..."></textarea>
+            </div>
+
+
+            <div style="margin-bottom: 1em;">
+                <label for="image" style="margin-bottom: .5em;"> Profile Picture:</label>
+                <input type="file" id="image" name="image" accept="image/*" style="width: 100%;border: 1px solid #964A99;">
             </div>
 
 

@@ -3,7 +3,7 @@
 
 <div class="container" style="width: 80%; margin: auto;">
     <h1 style="position: relative; text-align: center;">ContactMi Register</h1>
-    <form action="/register" method="POST">
+    <form action="/register" method="POST" enctype="multipart/form-data">
     
             <h2>Account Information</h2>
 
@@ -41,6 +41,12 @@
                 <label for="bio" style="margin-bottom: .5em;">Bio <i>(opt.)</i></label>
                 <textarea class="styled-input rounded" type="text" id="bio" name="bio" style="width: 100%;" placeholder="Describe yourself here..."></textarea>
             </div>
+
+            <div style="margin-bottom: 1em;">
+                <label for="image" style="margin-bottom: .5em;"> Profile Picture:</label>
+                <input type="file" id="image" name="image" accept="image/*" style="width: 100%;border: 1px solid #964A99;">
+            </div>
+
 
         <div style="text-align: right; display: flex;">
             <p>Already have an account? <a href="/login">Login</a></p>
