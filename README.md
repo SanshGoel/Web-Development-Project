@@ -6,7 +6,7 @@ ContactMi is a platform resembling Facebook but exclusively focuses on contact i
 
 ## Contributors
 
-- Vidhaan Singhvi - [@vidhaansinghvi](https://github.com/vidhaansinghvi)
+- Vidhaan Singhvi - [@vidhaansinghvi](https://github.com/vidhaansinghvi) - vidhaan.singhvi@colorado.edu
 - Samuel Beste - [@sbeste11](https://github.com/sbeste11) - samuel.beste@colorado.edu
 - Sansh Goel - [@Sansh28](https://github.com/Sansh28) - sago1198@colorado.edu
 - Nikhil Bailey - [@NikhilBailey21](https://github.com/NikhilBailey21) - nikhil.bailey@colorado.edu
@@ -103,6 +103,6 @@ docker-compose up
 ## Link to the deployed application
 
  ```bash
-   http://recitation-14-team-07.westus3.cloudapp.azure.com:3000/login
+http://recitation-14-team-07.westus3.cloudapp.azure.com:3000/login
 ```
 
