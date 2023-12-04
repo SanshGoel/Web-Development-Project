@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     display_name VARCHAR(100),
     phone VARCHAR(20),
     email VARCHAR(100),
-    bio VARCHAR(100),
+    bio VARCHAR(1024),
     status VARCHAR(50)
 );
 
