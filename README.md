@@ -99,6 +99,6 @@ These steps will allow you to set up and run ContactMi locally on your machine.
 
 7. Link to the deployed application
 
-```bash
+   ```bash
    http://recitation-14-team-07.westus3.cloudapp.azure.com:3000/login
-    ```
+
