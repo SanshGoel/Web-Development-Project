@@ -56,17 +56,16 @@ INSERT INTO headshot (user_id,img_path) VALUES
  (7,'uploads/OIP.jpeg'),
  (8,'uploads/OIP.jpeg'),
  (9,'uploads/OIP.jpeg'),
- (10,'uploads/OIP.jpeg'),
- (11,'uploads/sophie.jpeg'),
- (12,'uploads/OIP.jpeg'),
- (13,'uploads/mark.jpeg'),
- (14,'uploads/OIP.jpeg'),
- (15,'uploads/peter.jpeg'),
+ (10,'uploads/sophie.jpeg'),
+ (11,'uploads/OIP.jpeg'),
+ (12,'uploads/mark.jpeg'),
+ (13,'uploads/OIP.jpeg'),
+ (14,'uploads/peter.jpeg'),
+ (15,'uploads/OIP.jpeg'),
  (16,'uploads/OIP.jpeg'),
  (17,'uploads/OIP.jpeg'),
  (18,'uploads/OIP.jpeg'),
- (19,'uploads/OIP.jpeg'),
- (20,'uploads/OIP.jpeg');
+ (19,'uploads/OIP.jpeg');
 
 
 
