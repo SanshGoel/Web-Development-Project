@@ -91,10 +91,12 @@ These steps will allow you to set up and run ContactMi locally on your machine.
 
 
 ## How to run the tests
-  The tests will run automatically after executing the following command:
 
-      ```bash
-       docker-compose up
+The tests will run automatically after executing the following command:
+  
+    ```bash
+   docker-compose up
+   
 
 
 ## Link to the deployed application
