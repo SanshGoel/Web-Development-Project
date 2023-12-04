@@ -95,6 +95,7 @@ These steps will allow you to set up and run ContactMi locally on your machine.
 The tests will run automatically after executing the following command:
 
 ```bash
+docker-compose down -v
 docker-compose up
 ```
 
