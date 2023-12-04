@@ -1,13 +1,19 @@
 <%- include ('../partials/head') %>
 <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center;">
-    <h1>Welcome <%= displayName %></h1>
+    <h1 style="margin-bottom: .1em;">Welcome <%= displayName %></h1>
 </div>
-<div class="profile-info">
-    <p><strong>Your Phone Number:</strong> <%= phoneNumber %></p>
-    <p><strong>Your Email:</strong> <%= email %></p>
-    <p><strong>Make Changes to <a href="/edit-account" style="text-align: right;">Your Account</a></strong></p>
+<div class="profile-info" style="display: flex; justify-content: space-between; align-items: center; position:relative; left: 1em">
+    <div>
+        <p style="margin-bottom: 3em;"> <strong>Your Phone Number: </strong> <%= phoneNumber %></p>
+        <p style="margin-bottom: 3em;"><strong>Your Email: </strong> <%= email %></p>
+        <p style="margin-bottom: 3em;"><strong>Bio: </strong> <%= bio %> </p>
+        <p style="margin-bottom: 3em;"><strong>Make Changes to <a href="/edit-account">Your Account</a></strong></p>
+    </div>
+    <div style="flex-grow: .2;">
+        <img id="current-friend-image" class="rounded-circle shadow-4-strong" src="/user-image/<%= userID %>" alt="User Image">
+    </div>
 </div>
-<h2>Add a New Friend:</h2>
+<h2 style= "position: relative; left: 20px">Add a New Friend:</h2>
 <% locals.searchUsers = true %>
 <%- include ('../partials/search.ejs') %>
 
