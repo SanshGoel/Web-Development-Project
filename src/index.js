@@ -233,7 +233,7 @@ const auth = (req, res, next) => {
 app.use(auth)
 
 app.get('/home', (req, res) => {
-    const { user_id, display_name, phone, email, profile_image } = req.session.user;
+    const { user_id, display_name, phone, email,bio} = req.session.user;
     
     
     res.status(200).render('pages/home', {
@@ -241,7 +241,8 @@ app.get('/home', (req, res) => {
         displayName: display_name,
         phoneNumber: phone,
         email: email,
-        profileImage: profile_image || '/images/default-profile.png'
+        bio: bio,
+        
     })
 })
 
