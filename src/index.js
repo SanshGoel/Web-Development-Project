@@ -233,7 +233,7 @@ const auth = (req, res, next) => {
 app.use(auth)
 
 app.get('/home', (req, res) => {
-    const { user_id, display_name, phone, email,bio } = req.session.user;
+    const { user_id, display_name, phone, email,bio} = req.session.user;
     
     
     res.status(200).render('pages/home', {
@@ -242,6 +242,7 @@ app.get('/home', (req, res) => {
         phoneNumber: phone,
         email: email,
         bio: bio,
+        
     })
 })
 
