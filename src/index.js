@@ -403,7 +403,7 @@ app.get('/friends', (req, res) => {
             res.status(200).render('pages/friends', {
                 currentFriend: currentFriend,
                 friends: friends,
-                pendingRequests: pendingRequests,
+                pendingRequests: pendingRequests
             });
         })
         .catch((error) => {
@@ -522,9 +522,18 @@ app.post('/search', async (req, res) => {
                 if (friend.user_id == currentFriendId) currentFriend = friend
             })
 
+            const pendingRequestsQuery = `
+                SELECT * FROM pending_friends p
+                INNER JOIN users u ON u.user_id = p.requester_id
+                WHERE p.requestee_id = $1
+            `
+
+            const pendingRequests = await db.query(pendingRequestsQuery, [req.session.user.user_id])
+
             res.status( 200).render('pages/friends', {
-                friends: result,
-                currentFriend: currentFriend
+                friends: result, 
+                currentFriend: currentFriend,
+                pendingRequests: pendingRequests
             })
         }
     } catch (error) {
