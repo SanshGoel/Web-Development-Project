@@ -4,9 +4,9 @@ User acceptance tests - execute and get results
 
 Individual Tasks:
 
-Vidhaan Singhvi - Find new task
+Vidhaan Singhvi - Make the bios for users, create database with users, Work on the  presentation, work search friends feature
 Tanmay meti - Find new task
-Sansh Goel - Find new task
+Sansh Goel - Lab-13 Web Develoyment, updating readme, worked on some css stuff, project Presentation
 Nikhil Bailey - Send friend request feature
 Sam Beste - Accept/reject friend request feature
 Adan Esparza - Profile Headshots
