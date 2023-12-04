@@ -48,11 +48,11 @@
                     <div class="friend-request-info" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="friend-request-name"><%- request.display_name %></div>
                         <div class="friend-request-actions">
-                            <form action="/acceptFriendRequest" method="post" style="display: inline-block;">
+                            <form id="accept-friend" action="/acceptFriendRequest" method="post" style="display: inline-block;">
                                 <input type="hidden" name="requesterId" value="<%- request.requester_id %>" />
                                 <button type="submit">Accept</button>
                             </form>
-                            <form action="/rejectFriendRequest" method="post" style="display: inline-block;">
+                            <form id="reject-friend" action="/rejectFriendRequest" method="post" style="display: inline-block;">
                                 <input type="hidden" name="requesterId" value="<%- request.requester_id %>" />
                                 <button type="submit">Reject</button>
                             </form>
