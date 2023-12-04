@@ -125,21 +125,6 @@ app.get('/register', (req, res) => {
     res.status(200).render('pages/register',{omitNavbar: true, customBodyWidthEM: 60, fartherFromTop: true})
 })
 
-app.get('/edit-account', (req, res) => {
-    // Check if user is logged in
-    if (req.session.user) {
-        // Render the registration page and pass user details to the template
-        res.status(200).render('pages/edit-account', {
-            omitNavbar: false,
-            customBodyWidthEM: 60,
-            fartherFromTop: true,
-            user: req.session.user 
-        });
-    } else {
-        res.redirect('pages/login');
-    }
-});
-
 
 app.post('/register', upload.single('image'), async (req, res) => {
     try {
@@ -208,58 +193,6 @@ app.post('/register', upload.single('image'), async (req, res) => {
     }
 })
 
-app.post('/edit-account', upload.single('image'),async (req, res) => {
-    try {
-        const { username, display_name, phone, email, bio } = req.body;
-
-
-        const userUpdateQuery = `
-            UPDATE users
-            SET display_name = $2, phone = $3, email = $4, bio = $5
-            WHERE username = $1
-            RETURNING *;
-        `;
-
-        const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio]);
-
-        
-        if(req.file){
-            const imagePath = req.file.path;
-
-            // SQL query to insert or update the image path
-            const updateQuery = 'UPDATE headshot SET img_path = $1 WHERE user_id = $2'
-            await db.query(updateQuery, [imagePath, result[0].user_id]);
-        }
-
-        
-        
-   
-        // Check if the update was successful
-        if (result && Array.isArray(result) && result.length === 1) {
-            const updatedUserDetails = result[0];
-            console.log("Updated user details for user_id: " + updatedUserDetails.user_id);
-
-            // Update session user with the most recent details
-            req.session.user = updatedUserDetails;
-            req.session.save();
-
-            // Render the template with the updated user details from the session
-            res.render('pages/edit-account', {
-                omitNavbar: false,
-                customBodyWidthEM: 60,
-                fartherFromTop: true,
-                user: req.session.user
-            });
-        } else {
-            console.log("Failed to update user details");
-            res.redirect('/edit-account');
-        }
-    } catch (error) {
-        console.error(error);
-        res.redirect('/edit-account');
-    }
-});
-
 app.get('/user-image/:userId', async (req, res) => {
     const userId = parseInt(req.params.userId); // Convert userId to a number
 
@@ -310,6 +243,65 @@ app.get('/home', (req, res) => {
         email: email,
         profileImage: profile_image || '/images/default-profile.png'
     })
+})
+
+app.get('/edit-account', (req, res) => {
+    // Render the registration page and pass user details to the template
+    res.status(200).render('pages/edit-account', {
+        omitNavbar: false,
+        customBodyWidthEM: 60,
+        fartherFromTop: true,
+        user: req.session.user
+    })
+})
+
+app.post('/edit-account', upload.single('image'),async (req, res) => {
+    try {
+        const { username, display_name, phone, email, bio, status } = req.body;
+
+
+        const userUpdateQuery = `
+            UPDATE users
+            SET display_name = $2, phone = $3, email = $4, bio = $5, status = $6
+            WHERE username = $1
+            RETURNING *
+        `
+
+        const result = await db.query(userUpdateQuery, [username, display_name, phone, email, bio, status])
+
+
+        if(req.file){
+            const imagePath = req.file.path;
+
+            // SQL query to insert or update the image path
+            const updateQuery = 'UPDATE headshot SET img_path = $1 WHERE user_id = $2'
+            await db.query(updateQuery, [imagePath, result[0].user_id])
+        }
+
+        // Check if the update was successful
+        if (result && Array.isArray(result) && result.length === 1) {
+            const updatedUserDetails = result[0]
+            console.log("Updated user details for user_id: " + updatedUserDetails.user_id)
+
+            // Update session user with the most recent details
+            req.session.user = updatedUserDetails
+            req.session.save()
+
+            // Render the template with the updated user details from the session
+            res.render('pages/edit-account', {
+                omitNavbar: false,
+                customBodyWidthEM: 60,
+                fartherFromTop: true,
+                user: req.session.user
+            })
+        } else {
+            console.log("Failed to update user details")
+            res.redirect('/edit-account')
+        }
+    } catch (error) {
+        console.error(error);
+        res.redirect('/edit-account')
+    }
 })
 
 app.post('/addFriend', (req, res) => {
@@ -455,15 +447,16 @@ app.post('/search', async (req, res) => {
         if (searchUsers) {
             // Search all users with pagination, considering display_name, email, and phone
             searchAllUsersQuery = searchAll ? `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 ORDER BY display_name
                 --LIMIT $2 OFFSET $3
-            ` : `
-                SELECT users.*, headshot.img
+            `
+                : `
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE LOWER(display_name) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(email) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(phone) LIKE '%' || LOWER($1) || '%'
@@ -489,18 +482,18 @@ app.post('/search', async (req, res) => {
         } else {
             // Search friends with pagination, considering display_name, email, and phone
             searchFriendsQuery = searchAll ? `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE users.user_id IN (
                     SELECT user_id_1 AS user_id FROM friends WHERE user_id_2 = $2
                 )
                 ORDER BY display_name
                 --LIMIT $2 OFFSET $3
             ` : `
-                SELECT users.*, headshot.img
+                SELECT users.* --, headshot.img
                 FROM users
-                LEFT JOIN headshot ON users.user_id = headshot.user_id
+                --LEFT JOIN headshot ON users.user_id = headshot.user_id
                 WHERE (LOWER(display_name) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(email) LIKE '%' || LOWER($1) || '%'
                     OR LOWER(phone) LIKE '%' || LOWER($1) || '%')

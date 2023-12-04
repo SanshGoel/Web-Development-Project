@@ -38,6 +38,16 @@
 }
 
 
+#accept-friend button {
+    background-color: #34AAEB;
+    color: 964A99; 
+}
+
+#reject-friend button {
+    background-color: #EB9B34;
+    color: 964A99; 
+}
+
 .current-friend-display-name {
     text-align: center;
     font-weight: bolder;
@@ -82,3 +92,4 @@
 .search-spacer {
     height: 2em;
 }
+
