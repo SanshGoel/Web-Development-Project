@@ -128,7 +128,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', upload.single('image'), async (req, res) => {
     try {
-        const { username, password, display_name, phone, email, bio } = req.body;
+        const { username, password, display_name, phone, email, bio, status } = req.body;
 
         //Check if a user already exists with that name
         const preexistingCheck = `
@@ -154,12 +154,12 @@ app.post('/register', upload.single('image'), async (req, res) => {
 
         // To-DO: Insert user details into 'users' table with auto-incrementing user_id
         const userQuery = `
-            INSERT INTO users (username, password, display_name, phone, email, bio)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO users (username, password, display_name, phone, email, bio, status)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING user_id
-        `
+        `;
 
-        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio])
+        const result = await db.query(userQuery, [username, hash, display_name, phone, email, bio, status])
         if(!result || !Array.isArray(result) || result.length < 1) {
             res.status(400).render('pages/register',{
                 omitNavbar: true,
