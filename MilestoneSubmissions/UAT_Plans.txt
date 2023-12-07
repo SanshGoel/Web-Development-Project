@@ -119,3 +119,10 @@ Add Friend Feature
 One tester will send friend requests while the other will accept/decline requests
 Search Friend Feature
 One tester will be needed. They will try to look up a person that has already registered and is part of the database.
+
+Testing: 
+Register/ login: the user thought the registration and login went pretty smooth and there were no hiccups or mishaps with the registration. Both users made accounts on the website and logged in. They thought that a good idea might be to have a prefilled bio so it's not empty for people not willing to answer.
+
+Add Friends feature: The both users added each other and ended up being a seamless process where both the users agreed that it was easy to add each other. One good idea might be is to add a mutual friend feature.
+
+Search Friend Feature: Both the users were able to add each other as friends and had an easy time doing so. When these users added each other, they used the search feature which was easily displayed in front of them and was easy to access.
